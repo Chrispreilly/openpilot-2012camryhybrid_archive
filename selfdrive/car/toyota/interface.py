@@ -121,7 +121,7 @@ class CarInterface(object):
     if candidate in [CAR.PRIUS, CAR.RAV4H, CAR.LEXUS_RXH]: # rav4 hybrid can do stop and go
       ret.minEnableSpeed = -1.
     elif candidate in [CAR.RAV4, CAR.COROLLA]: # TODO: hack ICE to do stop and go
-      ret.minEnableSpeed = 19. * CV.MPH_TO_MS
+      ret.minEnableSpeed = -1. * CV.MPH_TO_MS
 
     centerToRear = ret.wheelbase - ret.centerToFront
     # TODO: get actual value, for now starting with reasonable value for
