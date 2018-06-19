@@ -87,10 +87,10 @@ void *safety_setter_thread(void *s) {
   auto safety_param = car_params.getSafetyParam();
   LOGW("setting safety model: %d with param %d", safety_model, safety_param);
 
-  int safety_setting = 0;
+  int safety_setting = 2; //0;
   switch (safety_model) {
   case (int)cereal::CarParams::SafetyModels::NO_OUTPUT:
-    safety_setting = SAFETY_NOOUTPUT;
+    safety_setting = SAFETY_TOYOTA; //NOOUTPUT;
     break;
   case (int)cereal::CarParams::SafetyModels::HONDA:
     safety_setting = SAFETY_HONDA;
