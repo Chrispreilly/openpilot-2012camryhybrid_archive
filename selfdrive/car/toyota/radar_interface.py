@@ -8,6 +8,42 @@ from selfdrive.services import service_list
 import selfdrive.messaging as messaging
 
 
+
+
+class RadarInterface(object):
+  def __init__(self, CP):
+    # radar
+    self.pts = {}
+    self.delay = 0.1
+
+  def update(self):
+
+    ret = car.RadarState.new_message()
+    time.sleep(0.05)  # radard runs on RI updates
+    
+    return ret
+
+if __name__ == "__main__":
+  RI = RadarInterface(None)
+  while 1:
+    ret = RI.update()
+    print(chr(27) + "[2J")
+    print ret
+
+
+
+
+
+
+
+
+'''
+
+
+
+
+
+
 RADAR_MSGS = range(0x210, 0x220)
 
 def _create_radard_can_parser():
@@ -91,3 +127,5 @@ if __name__ == "__main__":
     ret = RI.update()
     print(chr(27) + "[2J")
     print ret
+    
+    '''
