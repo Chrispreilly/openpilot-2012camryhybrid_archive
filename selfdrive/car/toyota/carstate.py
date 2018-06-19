@@ -110,18 +110,10 @@ class CarState(object):
     self.can_valid = cp.can_valid
 
     # update prevs, update must run once per loop
-    self.prev_left_blinker_on = self.left_blinker_on
-    self.prev_right_blinker_on = self.right_blinker_on
 
-    self.door_all_closed = not any([cp.vl["SEATS_DOORS"]['DOOR_OPEN_FL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_FR'],
-                                    cp.vl["SEATS_DOORS"]['DOOR_OPEN_RL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_RR']])
-    self.seatbelt = not cp.vl["SEATS_DOORS"]['SEATBELT_DRIVER_UNLATCHED']
 
     can_gear = cp.vl["GEAR_PACKET"]['GEAR']
-    self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
-    self.pedal_gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']
-    self.car_gas = self.pedal_gas
-    self.esp_disabled = cp.vl["ESP_CONTROL"]['TC_DISABLED']
+
 
     # calc best v_ego estimate, by averaging two opposite corners
     self.v_wheel_fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS
@@ -140,30 +132,58 @@ class CarState(object):
     self.a_ego = float(v_ego_x[1])
     self.standstill = not self.v_wheel > 0.001
 
+    
+    
     self.angle_steers = cp.vl["STEER_ANGLE_SENSOR"]['STEER_ANGLE'] + cp.vl["STEER_ANGLE_SENSOR"]['STEER_FRACTION']
     self.angle_steers_rate = cp.vl["STEER_ANGLE_SENSOR"]['STEER_RATE']
-    self.gear_shifter = parse_gear_shifter(can_gear, self.car_fingerprint)
-    self.main_on = cp.vl["PCM_CRUISE_2"]['MAIN_ON']
-    self.left_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
-    self.right_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2
 
-    # we could use the override bit from dbc, but it's triggered at too high torque values
-    self.steer_override = abs(cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']) > 100
     # 2 is standby, 10 is active. TODO: check that everything else is really a faulty state
-    self.steer_state = cp.vl["EPS_STATUS"]['LKA_STATE']
-    self.steer_error = cp.vl["EPS_STATUS"]['LKA_STATE'] not in [1, 5]
-    self.ipas_active = cp.vl['EPS_STATUS']['IPAS_STATE'] == 3
-    self.brake_error = 0
+    self.steer_state = cp.vl["EPS_STATUS"]['LKA_STATE'] #3
+    self.ipas_active = cp.vl['EPS_STATUS']['IPAS_STATE'] == 3 #0
+
     self.steer_torque_driver = cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']
     self.steer_torque_motor = cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_EPS']
 
-    self.user_brake = 0
+    self.main_on = cp.vl["PCM_CRUISE_2"]['MAIN_ON'] #1
     self.v_cruise_pcm = cp.vl["PCM_CRUISE_2"]['SET_SPEED']
-    self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE']
-    self.gas_pressed = not cp.vl["PCM_CRUISE"]['GAS_RELEASED']
-    self.low_speed_lockout = cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
-    self.brake_lights = bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or self.brake_pressed)
-    if self.CP.carFingerprint == CAR.PRIUS:
+    
+    self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE'] #1
+
+    
+    
+    
+ 
+      
+      
+      
+      #Below values never update
+      
+    self.low_speed_lockout = 0 #cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
+    self.brake_lights = False #bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or self.brake_pressed) #This one causes controlsd fail when "0", expected bool
+    self.gas_pressed = 0 #not cp.vl["PCM_CRUISE"]['GAS_RELEASED']     
+    self.user_brake = 0      
+    self.brake_error = 0      
+    self.steer_error = False #cp.vl["EPS_STATUS"]['LKA_STATE'] not in [1, 5] #0      
+    self.steer_override = False #abs(cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']) > 100 #This causes controlsd error when "0", expected bool
+    self.left_blinker_on = 0 #cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
+    self.right_blinker_on = 0 #cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2      
+    self.gear_shifter = 0 #parse_gear_shifter(can_gear, self.car_fingerprint)      
+    self.brake_pressed = 0 #cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
+    self.pedal_gas = 0 #cp.vl["GAS_PEDAL"]['GAS_PEDAL']
+    self.car_gas = 0 #self.pedal_gas
+    self.esp_disabled = 0 #cp.vl["ESP_CONTROL"]['TC_DISABLED']      
+    self.prev_left_blinker_on = 0 #self.left_blinker_on
+    self.prev_right_blinker_on = 0 #self.right_blinker_on
+    self.door_all_closed = 1 #not any([cp.vl["SEATS_DOORS"]['DOOR_OPEN_FL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_FR'],
+                                    #cp.vl["SEATS_DOORS"]['DOOR_OPEN_RL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_RR']])
+    self.seatbelt = 1 #not cp.vl["SEATS_DOORS"]['SEATBELT_DRIVER_UNLATCHED']      
+      
+      if self.CP.carFingerprint == CAR.PRIUS:
       self.generic_toggle = cp.vl["AUTOPARK_STATUS"]['STATE'] != 0
     else:
-      self.generic_toggle = bool(cp.vl["LIGHT_STALK"]['AUTO_HIGH_BEAM'])
+      self.generic_toggle = bool(cp.vl["LIGHT_STALK"]['AUTO_HIGH_BEAM'])    
+      
+      
+      
+      
+      
