@@ -119,10 +119,10 @@ struct MessageState {
       } else if (sig.type == SignalType::TOYOTA_CHECKSUM) {
         // INFO("CHECKSUM %d %d %018llX - %lld vs %d\n", address, size, dat, tmp, toyota_checksum(address, dat, size));
 
-        if (toyota_checksum(address, dat, size) != tmp) {
-          INFO("%X CHECKSUM FAIL\n", address);
-          return false;
-        }
+       // if (toyota_checksum(address, dat, size) != tmp) {
+       //   INFO("%X CHECKSUM FAIL\n", address);
+       //   return false;
+       // }
       }
 
       vals[i] = tmp * sig.factor + sig.offset;
