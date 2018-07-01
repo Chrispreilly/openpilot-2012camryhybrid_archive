@@ -95,8 +95,8 @@ def data_sample(CI, CC, thermal, calibration, health, poller, cal_status, overte
   # *** health checking logic ***
   if hh is not None:
     controls_allowed = hh.health.controlsAllowed
-    if not controls_allowed:
-      events.append(create_event('controlsMismatch', [ET.IMMEDIATE_DISABLE]))
+    #if not controls_allowed:
+    #  events.append(create_event('controlsMismatch', [ET.IMMEDIATE_DISABLE]))
 
   return CS, events, cal_status, overtemp, free_space
 
