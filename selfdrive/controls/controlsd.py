@@ -89,8 +89,8 @@ def data_sample(CI, CC, thermal, calibration, health, poller, cal_status, overte
   if cal_status != Calibration.CALIBRATED:
     if cal_status == Calibration.UNCALIBRATED:
       events.append(create_event('calibrationInProgress', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
-    else:
-      events.append(create_event('calibrationInvalid', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+   # else:
+   #   events.append(create_event('calibrationInvalid', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
 
   # *** health checking logic ***
   if hh is not None:
