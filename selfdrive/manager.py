@@ -121,7 +121,7 @@ persistent_processes = [
   'logmessaged',
   'logcatd',
   'tombstoned',
-  #'uploader',
+  'uploader',
   'ui',
   'gpsd',
   'ubloxd',
