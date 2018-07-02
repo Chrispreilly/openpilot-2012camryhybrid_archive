@@ -1,3 +1,5 @@
+'''
+
 #!/usr/bin/env python
 import os
 from selfdrive.can.parser import CANParser
@@ -7,7 +9,10 @@ import zmq
 from selfdrive.services import service_list
 import selfdrive.messaging as messaging
 
-
+'''
+#Mock radar from #tesla
+from cereal import car
+import time
 
 
 class RadarInterface(object):
@@ -24,7 +29,7 @@ class RadarInterface(object):
     return ret
 
 if __name__ == "__main__":
-  RI = RadarInterface(None)
+  RI = RadarInterface()
   while 1:
     ret = RI.update()
     print(chr(27) + "[2J")
