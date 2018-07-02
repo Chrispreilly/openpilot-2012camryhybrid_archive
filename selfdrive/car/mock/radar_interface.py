@@ -17,7 +17,7 @@ class RadarInterface(object):
     return ret
 
 if __name__ == "__main__":
-  RI = RadarInterface(None)
+  RI = RadarInterface()
   while 1:
     ret = RI.update()
     print(chr(27) + "[2J")
