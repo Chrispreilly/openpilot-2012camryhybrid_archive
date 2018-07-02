@@ -112,9 +112,6 @@ class CarState(object):
     # update prevs, update must run once per loop
 
 
-    can_gear = cp.vl["GEAR_PACKET"]['GEAR']
-
-
     # calc best v_ego estimate, by averaging two opposite corners
     self.v_wheel_fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS
     self.v_wheel_fr = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FR'] * CV.KPH_TO_MS
@@ -157,6 +154,10 @@ class CarState(object):
       
       
       #Below values never update
+      
+      
+
+    can_gear = 0x0 # Always in drive   cp.vl["GEAR_PACKET"]['GEAR']
       
     self.low_speed_lockout = 0 #cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
     self.brake_lights = False #bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or self.brake_pressed) #This one causes controlsd fail when "0", expected bool
