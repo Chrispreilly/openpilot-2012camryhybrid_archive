@@ -86,6 +86,7 @@ def get_car(logcan, sendcan=None, passive=True):
 
   if candidate is None:
     cloudlog.warning("car doesn't match any fingerprints: %r", fingerprints)
+    passive = True
     if passive:
       candidate = "mock"
     else:
