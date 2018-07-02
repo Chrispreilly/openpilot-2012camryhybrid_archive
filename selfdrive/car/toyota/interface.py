@@ -151,7 +151,7 @@ class CarInterface(object):
     ret.brakeMaxV = [1., 0.8]
 
     ret.enableCamera = not check_ecu_msgs(fingerprint, candidate, ECU.CAM)
-    ret.enableDsu = False #not check_ecu_msgs(fingerprint, candidate, ECU.DSU) #change to false to try and remove radar error
+    ret.enableDsu = not check_ecu_msgs(fingerprint, candidate, ECU.DSU) #change to false to try and remove radar error
     ret.enableApgs = False #not check_ecu_msgs(fingerprint, candidate, ECU.APGS)
     print "ECU Camera Simulated: ", ret.enableCamera
     print "ECU DSU Simulated: ", ret.enableDsu
