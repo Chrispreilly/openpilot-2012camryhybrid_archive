@@ -133,7 +133,7 @@ car_started_processes = [
   'controlsd',
   'loggerd',
   'sensord',
- # 'radard',
+  'radard',
   'visiond',
   'proclogd',
   'orbd',
