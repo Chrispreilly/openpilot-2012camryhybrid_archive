@@ -537,7 +537,7 @@ def manager_thread():
 
       # shutdown if the battery gets lower than 3%, t's discharging, we aren't running for
       # more than a minute but we were running
-      if msg.thermal.batteryPercent < 15 and msg.thermal.batteryStatus == "Discharging" and \ #change min battery level from 3%
+      if msg.thermal.batteryPercent < 15 and msg.thermal.batteryStatus == "Discharging" and \
          started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
