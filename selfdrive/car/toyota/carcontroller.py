@@ -14,7 +14,7 @@ ACCEL_MIN = -3.0 # 3   m/s2
 ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
 
 # Steer torque limits
-STEER_MAX = 1500
+STEER_MAX = 1000 #1500
 STEER_DELTA_UP = 10       # 1.5s time to peak torque
 STEER_DELTA_DOWN = 25     # always lower than 45 otherwise the Rav4 faults (Prius seems ok with 50)
 STEER_ERROR_MAX = 350     # max delta between torque cmd and torque motor
@@ -129,10 +129,10 @@ class CarController(object):
     # steer torque
     apply_steer = int(round(actuators.steer * STEER_MAX))
 
-    max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
-    min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
+  #  max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
+  #  min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
 
-    apply_steer = clip(apply_steer, min_lim, max_lim)
+  #  apply_steer = clip(apply_steer, min_lim, max_lim)
 
     # slow rate if steer torque increases in magnitude
     if self.last_steer > 0:
