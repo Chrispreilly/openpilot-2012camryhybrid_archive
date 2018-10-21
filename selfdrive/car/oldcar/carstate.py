@@ -7,7 +7,8 @@ import numpy as np
 
 def parse_gear_shifter(can_gear, car_fingerprint):
   # TODO: Use values from DBC to parse this field
-  elif car_fingerprint in [CAR.CAMRYH, CAR.COROLLA]:
+  elif car_fingerprint in [CAR.CAMRYH, 
+                           CAR.COROLLA]:
     if can_gear == 0x20:
       return "park"
     elif can_gear == 0x10:
