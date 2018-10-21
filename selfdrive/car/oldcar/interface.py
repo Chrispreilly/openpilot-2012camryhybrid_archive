@@ -192,7 +192,7 @@ class CarInterface(object):
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.KPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
-    if self.CP.carFingerprint == CAR.RAV4H:
+    if self.CP.carFingerprint == CAR.CAMRYH:
       # ignore standstill in hybrid rav4, since pcm allows to restart without
       # receiving any special command
       ret.cruiseState.standstill = False
