@@ -71,7 +71,7 @@ class CarInterface(object):
     ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
     ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
 
-    elif candidate == CAR.COROLLA:
+    if candidate == CAR.COROLLA:
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.70
       ret.steerRatio = 17.8
