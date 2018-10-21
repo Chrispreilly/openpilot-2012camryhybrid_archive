@@ -4,11 +4,11 @@ from cereal import car
 from selfdrive.config import Conversions as CV
 from selfdrive.controls.lib.drive_helpers import EventTypes as ET, create_event
 from selfdrive.controls.lib.vehicle_model import VehicleModel
-from selfdrive.car.toyota.carstate import CarState, get_can_parser
-from selfdrive.car.toyota.values import ECU, check_ecu_msgs, CAR
+from selfdrive.car.oldcar.carstate import CarState, get_can_parser
+from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 
 try:
-  from selfdrive.car.toyota.carcontroller import CarController
+  from selfdrive.car.oldcar.carcontroller import CarController
 except ImportError:
   CarController = None
 
