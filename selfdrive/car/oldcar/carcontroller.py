@@ -1,10 +1,10 @@
 from common.numpy_fast import clip, interp
 from selfdrive.boardd.boardd import can_list_to_can_capnp
-from selfdrive.car.toyota.toyotacan import make_can_msg, create_video_target,\
+from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_video_target,\
                                            create_steer_command, create_ui_command, \
                                            create_ipas_steer_command, create_accel_command, \
                                            create_fcw_command
-from selfdrive.car.toyota.values import ECU, STATIC_MSGS
+from selfdrive.car.oldcar.values import ECU, STATIC_MSGS
 from selfdrive.can.packer import CANPacker
 
 # Accel limits
