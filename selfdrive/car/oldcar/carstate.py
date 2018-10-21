@@ -1,4 +1,4 @@
-from selfdrive.car.toyota.values import CAR, DBC
+from selfdrive.car.oldcar.values import CAR, DBC
 from selfdrive.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 from common.kalman.simple_kalman import KF1D
@@ -7,19 +7,7 @@ import numpy as np
 
 def parse_gear_shifter(can_gear, car_fingerprint):
   # TODO: Use values from DBC to parse this field
-  if car_fingerprint == CAR.PRIUS:
-    if can_gear == 0x0:
-      return "park"
-    elif can_gear == 0x1:
-      return "reverse"
-    elif can_gear == 0x2:
-      return "neutral"
-    elif can_gear == 0x3:
-      return "drive"
-    elif can_gear == 0x4:
-      return "brake"
-  elif car_fingerprint in [CAR.RAV4, CAR.RAV4H, 
-                           CAR.LEXUS_RXH, CAR.COROLLA]:
+  elif car_fingerprint in [CAR.CAMRYH, CAR.COROLLA]:
     if can_gear == 0x20:
       return "park"
     elif can_gear == 0x10:
