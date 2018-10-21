@@ -2,7 +2,7 @@ from selfdrive.car import dbc_dict
 
 class CAR:
   COROLLA = "TOYOTA COROLLA 2017"
-  CAMRYH = "TOYOTA CAMRY HYBRID 2012"
+  CAMRYH = "TOYOTA CAMRY HYBRID 2012" #camryh
 
 
 class ECU:
