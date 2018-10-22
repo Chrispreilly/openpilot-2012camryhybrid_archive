@@ -134,6 +134,10 @@ class CarState(object):
     self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE'] #1
 
     
+    self.prev_left_blinker_on = self.left_blinker_on
+    self.prev_right_blinker_on = self.right_blinker_on
+    self.left_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
+    self.right_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2   
     
     
  
@@ -152,16 +156,12 @@ class CarState(object):
     self.user_brake = 0      
     self.brake_error = 0      
     self.steer_error = False #cp.vl["EPS_STATUS"]['LKA_STATE'] not in [1, 5] #0      
-    self.steer_override = False #abs(cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']) > 100 #This causes controlsd error when "0", expected bool
-    self.left_blinker_on = 0 #cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
-    self.right_blinker_on = 0 #cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2      
+    self.steer_override = False #abs(cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']) > 100 #This causes controlsd error when "0", expected bool    
     self.gear_shifter = 0 #parse_gear_shifter(can_gear, self.car_fingerprint)      
     self.brake_pressed = 0 #cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
     self.pedal_gas = 0 #cp.vl["GAS_PEDAL"]['GAS_PEDAL']
     self.car_gas = 0 #self.pedal_gas
     self.esp_disabled = 0 #cp.vl["ESP_CONTROL"]['TC_DISABLED']      
-    self.prev_left_blinker_on = 0 #self.left_blinker_on
-    self.prev_right_blinker_on = 0 #self.right_blinker_on
     self.door_all_closed = 1 #not any([cp.vl["SEATS_DOORS"]['DOOR_OPEN_FL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_FR'],
                                     #cp.vl["SEATS_DOORS"]['DOOR_OPEN_RL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_RR']])
     self.seatbelt = 1 #not cp.vl["SEATS_DOORS"]['SEATBELT_DRIVER_UNLATCHED']      
