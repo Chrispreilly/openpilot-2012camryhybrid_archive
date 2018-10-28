@@ -150,7 +150,7 @@ class CarState(object):
     self.left_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
     self.right_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2 
     
-    
+    self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
     
  
       
