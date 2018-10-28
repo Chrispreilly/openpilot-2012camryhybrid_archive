@@ -208,8 +208,10 @@ class CarInterface(object):
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
     
+    #Disable if brake pressed
     if (self.CS.brake_pressed == True):
       self.user_enabled = False
+      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       
 
     # cruise state
