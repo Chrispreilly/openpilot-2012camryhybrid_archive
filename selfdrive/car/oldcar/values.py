@@ -42,5 +42,5 @@ FINGERPRINTS = {
 
 DBC = {
   CAR.COROLLA: dbc_dict('toyota_corolla_2017_pt_generated', 'toyota_prius_2017_adas'),
-  CAR.CAMRYH: dbc_dict('toyota_camry_hybrid_2012_pt_generated.dbc', 'toyota_prius_2017_adas'),
+  CAR.CAMRYH: dbc_dict('toyota_camry_hybrid_2018_pt_generated.dbc', 'toyota_prius_2017_adas'),
 }
