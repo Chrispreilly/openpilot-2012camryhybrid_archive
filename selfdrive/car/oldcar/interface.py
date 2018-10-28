@@ -23,6 +23,16 @@ class CarInterface(object):
     self.brake_pressed_prev = False
     self.can_invalid_count = 0
     self.cruise_enabled_prev = False
+    
+    # Double cruise stalk pull enable
+    # On Toyota CamryH pulling the stalk is the cancel command
+    self.last_cruise_stalk_pull_time = 0
+    self.cruise_stalk_pull_time = 0
+    #self.cruise_stalk_pull = False in carstate
+    self.last_cruise_stalk_pull = False
+    self.double_stalk_pull = False
+    self.user_enabled = False
+    
 
     # *** init the major players ***
     self.CS = CarState(CP)
@@ -186,9 +196,21 @@ class CarInterface(object):
 
     ret.steeringTorque = self.CS.steer_torque_driver
     ret.steeringPressed = self.CS.steer_override
+    
+    # Double Stalk Pull Logic
+    curr_time_ms = _current_time_millis()
+    if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False)
+      self.cruise_stalk_pull_time = curr_time_ms
+      if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000)
+        #Stalk pulled twice, enable
+        self.user_enabled = True 
+      self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
+    self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
+    
+      
 
     # cruise state
-    ret.cruiseState.enabled = True #self.CS.pcm_acc_status != 0
+    ret.cruiseState.enabled = self.user_enabled == True #self.CS.pcm_acc_status != 0
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.KPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
@@ -266,6 +288,8 @@ class CarInterface(object):
     if (ret.gasPressed and not self.gas_pressed_prev) or \
        (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      #disable if brake pressed
+      self.user_enabled = False
 
     if ret.gasPressed:
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
