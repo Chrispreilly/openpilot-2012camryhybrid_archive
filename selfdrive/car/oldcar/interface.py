@@ -7,6 +7,9 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 
+def _current_time_millis():
+  return int(round(time.time() * 1000))
+
 try:
   from selfdrive.car.oldcar.carcontroller import CarController
 except ImportError:
