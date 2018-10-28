@@ -7,7 +7,7 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 import time
-#from selfdrive.common.timing import millis_since_boot
+from selfdrive.common.timing import millis_since_boot
 
 
 try:
@@ -202,7 +202,7 @@ class CarInterface(object):
     
     # Double Stalk Pull Logic
     if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False):
-      #self.cruise_stalk_pull_time = millis_since_boot()
+      self.cruise_stalk_pull_time = millis_since_boot()
       if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000):
         #Stalk pulled twice, enable
         self.user_enabled = True 
