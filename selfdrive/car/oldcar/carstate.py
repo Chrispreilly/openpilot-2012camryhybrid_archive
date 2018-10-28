@@ -78,6 +78,7 @@ class CarState(object):
     self.CP = CP
     self.left_blinker_on = 0
     self.right_blinker_on = 0
+    self.cruise_stalk_pull = False
 
     # initialize can parser
     self.car_fingerprint = CP.carFingerprint
