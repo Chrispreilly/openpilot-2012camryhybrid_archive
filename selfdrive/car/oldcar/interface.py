@@ -202,7 +202,7 @@ class CarInterface(object):
     
     # Double Stalk Pull Logic
     if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False):
-      self.cruise_stalk_pull_time = millis_since_boot()
+      #self.cruise_stalk_pull_time = millis_since_boot()
       if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000):
         #Stalk pulled twice, enable
         self.user_enabled = True 
