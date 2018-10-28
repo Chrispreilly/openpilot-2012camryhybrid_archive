@@ -7,9 +7,8 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 import time
+from common.selfdrive.common.timing import millis_since_boot
 
-def _current_time_millis():
-  return int(round(time.time() * 1000))
 
 try:
   from selfdrive.car.oldcar.carcontroller import CarController
@@ -202,9 +201,8 @@ class CarInterface(object):
     ret.steeringPressed = self.CS.steer_override
     
     # Double Stalk Pull Logic
-    curr_time_ms = _current_time_millis()
     if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False):
-      self.cruise_stalk_pull_time = curr_time_ms
+      self.cruise_stalk_pull_time = millis_since_boot()
       if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000):
         #Stalk pulled twice, enable
         self.user_enabled = True 
