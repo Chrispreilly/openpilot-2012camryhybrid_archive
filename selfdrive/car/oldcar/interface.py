@@ -7,7 +7,6 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 import time
-#from selfdrive.common.timing import millis_since_boot
 
 
 try:
@@ -209,6 +208,8 @@ class CarInterface(object):
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
     
+    if (self.brake_pressed == True):
+      self.user_enabled = False
       
 
     # cruise state
@@ -290,8 +291,7 @@ class CarInterface(object):
     if (ret.gasPressed and not self.gas_pressed_prev) or \
        (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
-      #disable if brake pressed
-      self.user_enabled = False
+     
 
     if ret.gasPressed:
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
