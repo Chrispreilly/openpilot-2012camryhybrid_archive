@@ -143,7 +143,7 @@ class CarState(object):
     
     self.cruise_stalk_pull = cp.vl["PCM_CRUISE_SM"]['MAIN_ON'] == 1
  
-    self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
+    self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED'] > 0
       
       
       #Below values never update
