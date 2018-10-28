@@ -45,6 +45,7 @@ def get_can_parser(CP):
     ("STEER_RATE", "STEER_ANGLE_SENSOR", 0),
     ("GAS_RELEASED", "PCM_CRUISE", 0),
     ("CRUISE_STATE", "PCM_CRUISE", 0),
+    ("MAIN_ON", "PCM_CRUISE_SM", 0),
     ("MAIN_ON", "PCM_CRUISE_2", 0),
     ("SET_SPEED", "PCM_CRUISE_2", 0),
     ("LOW_SPEED_LOCKOUT", "PCM_CRUISE_2", 0),
@@ -140,7 +141,7 @@ class CarState(object):
     self.left_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 1
     self.right_blinker_on = cp.vl["STEERING_LEVERS"]['TURN_SIGNALS'] == 2   
     
-    
+    self.cruise_stalk_pull = cp.vl["PCM_CRUISE_SM"]['MAIN_ON'] == 1
  
       
       
