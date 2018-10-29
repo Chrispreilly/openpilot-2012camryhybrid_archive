@@ -160,7 +160,6 @@ class CarState(object):
     self.steer_error = False #cp.vl["EPS_STATUS"]['LKA_STATE'] not in [1, 5] #0      
     self.steer_override = False #abs(cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']) > 100 #This causes controlsd error when "0", expected bool    
     self.gear_shifter = 0 #parse_gear_shifter(can_gear, self.car_fingerprint)      
-    self.brake_pressed = 0 #cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
     self.pedal_gas = 0 #cp.vl["GAS_PEDAL"]['GAS_PEDAL']
     self.car_gas = 0 #self.pedal_gas
     self.esp_disabled = 0 #cp.vl["ESP_CONTROL"]['TC_DISABLED']      
