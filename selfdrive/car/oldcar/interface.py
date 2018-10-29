@@ -208,7 +208,7 @@ class CarInterface(object):
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
     
-    if self.CS.brake_pressed > 0
+    if self.CS.brake_pressed > 0:
       self.user_enabled = False
       
 
