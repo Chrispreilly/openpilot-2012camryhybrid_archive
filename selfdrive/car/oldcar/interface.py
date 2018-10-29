@@ -208,14 +208,11 @@ class CarInterface(object):
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
     
-    #Disable if brake pressed
-    if ((self.CS.brake_pressed > 0) and (self.user_enabled == True)):
-      self.user_enabled = False
-      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+
       
 
     # cruise state
-    ret.cruiseState.enabled = self.user_enabled == True #self.CS.pcm_acc_status != 0
+    ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.KPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
@@ -282,7 +279,7 @@ class CarInterface(object):
       if ret.vEgo < 0.001:
         # while in standstill, send a user alert
         events.append(create_event('manualRestart', [ET.WARNING]))
-
+    
     # enable request in prius is simple, as we activate when Toyota is active (rising edge)
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
@@ -297,6 +294,11 @@ class CarInterface(object):
 
     if ret.gasPressed:
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
+      
+        #Disable if brake pressed
+    if ((self.CS.brake_pressed > 0) and (self.user_enabled == True)):
+      self.user_enabled = False
+      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
 
     ret.events = events
     ret.canMonoTimes = canMonoTimes
