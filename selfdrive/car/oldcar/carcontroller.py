@@ -149,9 +149,14 @@ class CarController(object):
     self.steer_angle_enabled, self.ipas_reset_counter = \
       ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
     #print self.steer_angle_enabled, self.ipas_reset_counter, CS.ipas_active
+    
+    if enabled
+      self.steer_angle_enabled = True
+    else
+      self.steer_angle_enabled = False
 
     # steer angle
-    if self.steer_angle_enabled and CS.ipas_active:
+    if self.steer_angle_enabled: # and CS.ipas_active:
       apply_angle = actuators.steerAngle
       angle_lim = interp(CS.v_ego, ANGLE_MAX_BP, ANGLE_MAX_V)
       apply_angle = clip(apply_angle, -angle_lim, angle_lim)
@@ -196,11 +201,11 @@ class CarController(object):
       else:
         can_sends.append(create_steer_command(self.packer, apply_steer, frame))
 
-    if self.angle_control:
+    if seld.steer_angle_enabled: #self.angle_control:
       can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled, 
                                                  ECU.APGS in self.fake_ecus))
-    elif ECU.APGS in self.fake_ecus:
-      can_sends.append(create_ipas_steer_command(self.packer, 0, 0, True))
+    #elif ECU.APGS in self.fake_ecus:
+    #  can_sends.append(create_ipas_steer_command(self.packer, 0, 0, True))
 
     # accel cmd comes from DSU, but we can spam can to cancel the system even if we are using lat only control
     if (frame % 3 == 0 and ECU.DSU in self.fake_ecus) or (pcm_cancel_cmd and ECU.CAM in self.fake_ecus):
