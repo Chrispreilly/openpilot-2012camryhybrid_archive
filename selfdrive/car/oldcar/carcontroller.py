@@ -181,6 +181,9 @@ class CarController(object):
     if CS.pcm_acc_status != 8:
       # pcm entered standstill or it's disabled
       self.standstill_req = False
+      
+    #****************Temp send angle in torque command message instead of torque********************
+    apply_steer = apply_angle
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
