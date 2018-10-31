@@ -206,7 +206,7 @@ class CarController(object):
         can_sends.append(create_steer_command(self.packer, angle_send, frame)) #can_sends.append(create_steer_command(self.packer, apply_steer, frame))
         
 
-    if seld.steer_angle_enabled: #self.angle_control:
+    if self.steer_angle_enabled: #self.angle_control:
       can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled, 
                                                  ECU.APGS in self.fake_ecus))
     #elif ECU.APGS in self.fake_ecus:
