@@ -100,6 +100,7 @@ class CarController(object):
     self.last_steer = 0
     self.last_angle = 0
     self.accel_steady = 0.
+    self.angle_send = 0.
     self.car_fingerprint = car_fingerprint
     self.alert_active = False
     self.last_standstill = False
@@ -183,7 +184,7 @@ class CarController(object):
       self.standstill_req = False
       
     #****************Temp send angle in torque command message instead of torque********************
-    apply_steer = apply_angle
+    angle_send = apply_angle * 100
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
@@ -202,7 +203,8 @@ class CarController(object):
       if self.angle_control:
         can_sends.append(create_steer_command(self.packer, 0., frame))
       else:
-        can_sends.append(create_steer_command(self.packer, apply_steer, frame))
+        can_sends.append(create_steer_command(self.packer, angle_send, frame)) #can_sends.append(create_steer_command(self.packer, apply_steer, frame))
+        
 
     if seld.steer_angle_enabled: #self.angle_control:
       can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled, 
