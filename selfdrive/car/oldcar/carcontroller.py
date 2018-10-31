@@ -150,9 +150,9 @@ class CarController(object):
       ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
     #print self.steer_angle_enabled, self.ipas_reset_counter, CS.ipas_active
     
-    if enabled
+    if enabled:
       self.steer_angle_enabled = True
-    else
+    else:
       self.steer_angle_enabled = False
 
     # steer angle
