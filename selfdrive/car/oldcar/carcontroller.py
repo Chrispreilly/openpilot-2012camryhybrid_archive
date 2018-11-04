@@ -184,7 +184,11 @@ class CarController(object):
       self.standstill_req = False
       
     #****************Temp send angle in torque command message instead of torque********************
+    if not enabled:
+      apply_angle = 0
     angle_send = apply_angle * 100
+    
+    
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
