@@ -46,7 +46,7 @@ def accel_hysteresis(accel, accel_steady, enabled):
 
   return accel, accel_steady
 
-
+'''
 def process_hud_alert(hud_alert, audible_alert):
   # initialize to no alert
   steer = 0
@@ -66,9 +66,9 @@ def process_hud_alert(hud_alert, audible_alert):
     sound2 = 1
 
   return steer, fcw, sound1, sound2
-
-
-def ipas_state_transition(steer_angle_enabled, enabled, ipas_active, ipas_reset_counter):
+'''
+'''
+#def ipas_state_transition(steer_angle_enabled, enabled, ipas_active, ipas_reset_counter):
 
   if enabled and not steer_angle_enabled:
     #ipas_reset_counter = max(0, ipas_reset_counter - 1)
@@ -90,7 +90,7 @@ def ipas_state_transition(steer_angle_enabled, enabled, ipas_active, ipas_reset_
 
   else:
     return False, 0
-
+'''
 
 class CarController(object):
   def __init__(self, dbc_name, car_fingerprint, enable_camera, enable_dsu, enable_apg):
@@ -128,7 +128,7 @@ class CarController(object):
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
     # steer torque
-    apply_steer = int(round(actuators.steer * STEER_MAX))
+#    apply_steer = int(round(actuators.steer * STEER_MAX))
 
   #  max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
   #  min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
@@ -136,28 +136,28 @@ class CarController(object):
   #  apply_steer = clip(apply_steer, min_lim, max_lim)
 
     # slow rate if steer torque increases in magnitude
-    if self.last_steer > 0:
-      apply_steer = clip(apply_steer, max(self.last_steer - STEER_DELTA_DOWN, - STEER_DELTA_UP), self.last_steer + STEER_DELTA_UP)
-    else:
-      apply_steer = clip(apply_steer, self.last_steer - STEER_DELTA_UP, min(self.last_steer + STEER_DELTA_DOWN, STEER_DELTA_UP))
+#    if self.last_steer > 0:
+#      apply_steer = clip(apply_steer, max(self.last_steer - STEER_DELTA_DOWN, - STEER_DELTA_UP), self.last_steer + STEER_DELTA_UP)
+#    else:
+#      apply_steer = clip(apply_steer, self.last_steer - STEER_DELTA_UP, min(self.last_steer + STEER_DELTA_DOWN, STEER_DELTA_UP))
 
     # dropping torque immediately might cause eps to temp fault. On the other hand, safety_toyota
     # cuts steer torque immediately anyway TODO: monitor if this is a real issue
     # only cut torque when steer state is a known fault
-    if not enabled or CS.steer_state in [9, 25]:
-      apply_steer = 0
+ #   if not enabled or CS.steer_state in [9, 25]:
+ #     apply_steer = 0
 
-    self.steer_angle_enabled, self.ipas_reset_counter = \
-      ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
+ #   self.steer_angle_enabled, self.ipas_reset_counter = \
+ #     ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
     #print self.steer_angle_enabled, self.ipas_reset_counter, CS.ipas_active
     
-    if enabled:
-      self.steer_angle_enabled = True
-    else:
-      self.steer_angle_enabled = False
+ #   if enabled:
+ #     self.steer_angle_enabled = True
+ #   else:
+ #     self.steer_angle_enabled = False
 
     # steer angle
-    if self.steer_angle_enabled: # and CS.ipas_active:
+    if enabled: # and CS.ipas_active:
       apply_angle = actuators.steerAngle
       angle_lim = interp(CS.v_ego, ANGLE_MAX_BP, ANGLE_MAX_V)
       apply_angle = clip(apply_angle, -angle_lim, angle_lim)
@@ -203,16 +203,16 @@ class CarController(object):
     # toyota can trace shows this message at 42Hz, with counter adding alternatively 1 and 2;
     # sending it at 100Hz seem to allow a higher rate limit, as the rate limit seems imposed
     # on consecutive messages
-    if ECU.CAM in self.fake_ecus:
-      if self.angle_control:
-        can_sends.append(create_steer_command(self.packer, 0., frame))
-      else:
-        can_sends.append(create_steer_command(self.packer, angle_send, frame)) #can_sends.append(create_steer_command(self.packer, apply_steer, frame))
-        
+ #   if ECU.CAM in self.fake_ecus:
+     if enabled:
+      can_sends.append(create_steer_command(self.packer, angle_send, frame))
+     else:
+      can_sends.append(create_steer_command(self.packer, 0., frame))
+             
 
-    if self.steer_angle_enabled: #self.angle_control:
-      can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled, 
-                                                 ECU.APGS in self.fake_ecus))
+#    if self.steer_angle_enabled: #self.angle_control:
+#      can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled, 
+                                                 #ECU.APGS in self.fake_ecus))
     #elif ECU.APGS in self.fake_ecus:
     #  can_sends.append(create_ipas_steer_command(self.packer, 0, 0, True))
 
@@ -223,26 +223,26 @@ class CarController(object):
       else:
         can_sends.append(create_accel_command(self.packer, 0, pcm_cancel_cmd, False))
 
-    if frame % 10 == 0 and ECU.CAM in self.fake_ecus:
-      for addr in TARGET_IDS:
-        can_sends.append(create_video_target(frame/10, addr))
+#    if frame % 10 == 0 and ECU.CAM in self.fake_ecus:
+#      for addr in TARGET_IDS:
+#        can_sends.append(create_video_target(frame/10, addr))
 
     # ui mesg is at 100Hz but we send asap if:
     # - there is something to display
     # - there is something to stop displaying
-    alert_out = process_hud_alert(hud_alert, audible_alert)
-    steer, fcw, sound1, sound2 = alert_out
+ #   alert_out = process_hud_alert(hud_alert, audible_alert)
+ #   steer, fcw, sound1, sound2 = alert_out
 
-    if (any(alert_out) and not self.alert_active) or \
-       (not any(alert_out) and self.alert_active):
-      send_ui = True
-      self.alert_active = not self.alert_active
-    else:
-      send_ui = False
+ #   if (any(alert_out) and not self.alert_active) or \
+ #      (not any(alert_out) and self.alert_active):
+ #     send_ui = True
+ #     self.alert_active = not self.alert_active
+ #   else:
+ #     send_ui = False
 
-    if (frame % 100 == 0 or send_ui) and ECU.CAM in self.fake_ecus:
-      can_sends.append(create_ui_command(self.packer, steer, sound1, sound2))
-      can_sends.append(create_fcw_command(self.packer, fcw))
+  #  if (frame % 100 == 0 or send_ui) and ECU.CAM in self.fake_ecus:
+  #    can_sends.append(create_ui_command(self.packer, steer, sound1, sound2))
+  #    can_sends.append(create_fcw_command(self.packer, fcw))
 
     #*** static msgs ***
 
