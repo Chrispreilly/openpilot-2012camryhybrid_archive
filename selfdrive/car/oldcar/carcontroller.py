@@ -100,7 +100,7 @@ class CarController(object):
     self.last_steer = 0
     self.last_angle = 0
     self.accel_steady = 0.
-    self.angle_send = 0.
+    self.angle_send = 0
     self.car_fingerprint = car_fingerprint
     self.alert_active = False
     self.last_standstill = False
