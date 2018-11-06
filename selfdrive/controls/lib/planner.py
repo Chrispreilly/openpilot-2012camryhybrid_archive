@@ -453,14 +453,14 @@ class Planner(object):
     plan_send.init('plan')
 
     events = []
-    #if self.model_dead:
-    #  events.append(create_event('modelCommIssue', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE])) Temp to ignor model issues
-    #if self.radar_dead or 'commIssue' in self.radar_errors:
-     # events.append(create_event('radarCommIssue', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+    if self.model_dead:
+      events.append(create_event('modelCommIssue', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE])) Temp to ignor model issues
+    if self.radar_dead or 'commIssue' in self.radar_errors:
+      events.append(create_event('radarCommIssue', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
     if 'fault' in self.radar_errors:
       events.append(create_event('radarFault', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
-    #if LaC.mpc_solution[0].cost > 10000. or LaC.mpc_nans:   # TODO: find a better way to detect when MPC did not converge
-    #  events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE])) Temp to ignor model issues
+    if LaC.mpc_solution[0].cost > 10000. or LaC.mpc_nans:   # TODO: find a better way to detect when MPC did not converge
+      events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE])) Temp to ignor model issues
 
     # Interpolation of trajectory
     dt = min(cur_time - self.acc_start_time, _DT_MPC + _DT) + _DT  # no greater than dt mpc + dt, to prevent too high extraps
