@@ -204,9 +204,9 @@ class CarController(object):
     # sending it at 100Hz seem to allow a higher rate limit, as the rate limit seems imposed
     # on consecutive messages
  #   if ECU.CAM in self.fake_ecus:
-     if enabled:
+    if enabled:
       can_sends.append(create_steer_command(self.packer, angle_send, frame))
-     else:
+    else:
       can_sends.append(create_steer_command(self.packer, 0., frame))
              
 
