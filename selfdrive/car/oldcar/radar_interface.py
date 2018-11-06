@@ -7,7 +7,7 @@ from cereal import car
 from common.realtime import sec_since_boot
 from selfdrive.services import service_list
 import selfdrive.messaging as messaging
-from selfdrive.car.toyota.values import NO_DSU_CAR
+from selfdrive.car.oldcar.values import NO_DSU_CAR
 
 
 RADAR_A_MSGS = list(range(0x210, 0x220))
