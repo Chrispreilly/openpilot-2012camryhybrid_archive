@@ -118,7 +118,7 @@ class CarController(object):
       apply_angle = 0
     angle_send = apply_angle * 100
     
-    if CS.left_blinker_on or CS.right_blinker:
+    if CS.left_blinker_on or CS.right_blinker_on:
       angle_send = 0
     
     
