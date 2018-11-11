@@ -188,6 +188,9 @@ class CarController(object):
       apply_angle = 0
     angle_send = apply_angle * 100
     
+    if self.CS.left_blinker_on or self.CS.right_blinker
+      angle_send = 0
+    
     
 
     self.last_steer = apply_steer
