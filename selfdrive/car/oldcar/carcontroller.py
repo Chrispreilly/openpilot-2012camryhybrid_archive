@@ -6,6 +6,7 @@ from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_video_target,\
                                            create_fcw_command
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS
 from selfdrive.can.packer import CANPacker
+from cereal import car
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
@@ -117,7 +118,7 @@ class CarController(object):
       apply_angle = 0
     angle_send = apply_angle * 100
     
-    if self.left_blinker_on or self.right_blinker:
+    if CS.left_blinker_on or CS.right_blinker:
       angle_send = 0
     
     
