@@ -46,7 +46,7 @@ def accel_hysteresis(accel, accel_steady, enabled):
 
   return accel, accel_steady
 
-
+'''
 def process_hud_alert(hud_alert, audible_alert):
   # initialize to no alert
   steer = 0
@@ -90,7 +90,7 @@ def ipas_state_transition(steer_angle_enabled, enabled, ipas_active, ipas_reset_
 
   else:
     return False, 0
-
+'''
 
 class CarController(object):
   def __init__(self, dbc_name, car_fingerprint, enable_camera, enable_dsu, enable_apg):
@@ -128,7 +128,7 @@ class CarController(object):
 
     # steer torque
     apply_steer = int(round(actuators.steer * STEER_MAX))
-
+'''
     max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
     min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
 
@@ -153,8 +153,9 @@ class CarController(object):
       ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
     #print self.steer_angle_enabled, self.ipas_reset_counter, CS.ipas_active
 
+'''
     # steer angle
-    if self.steer_angle_enabled and CS.ipas_active:
+    if enabled:
       apply_angle = actuators.steerAngle
       angle_lim = interp(CS.v_ego, ANGLE_MAX_BP, ANGLE_MAX_V)
       apply_angle = clip(apply_angle, -angle_lim, angle_lim)
@@ -168,7 +169,7 @@ class CarController(object):
       apply_angle = clip(apply_angle, self.last_angle - angle_rate_lim, self.last_angle + angle_rate_lim)
     else:
       apply_angle = CS.angle_steers
-
+'''
     if not enabled and CS.pcm_acc_status:
       # send pcm acc cancel cmd if drive is disabled but pcm is still on, or if the system can't be activated
       pcm_cancel_cmd = 1
@@ -179,6 +180,19 @@ class CarController(object):
     if CS.pcm_acc_status != 8:
       # pcm entered standstill or it's disabled
       self.standstill_req = False
+'''
+
+    #Disable if not enabled
+    if not enabled:
+      apply_angle = 0
+      apply_steer_req = 0
+    else:
+      apply_steer_req = 1
+      
+    #If blinker on, apply_steer_req = 0 until released
+    if CS.left_blinker_on or CS.right_blinker_on:
+      apply_steer_req = 0
+    
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
@@ -193,18 +207,13 @@ class CarController(object):
     # toyota can trace shows this message at 42Hz, with counter adding alternatively 1 and 2;
     # sending it at 100Hz seem to allow a higher rate limit, as the rate limit seems imposed
     # on consecutive messages
-    if ECU.CAM in self.fake_ecus:
+    if enabled:
       if self.angle_control:
         can_sends.append(create_steer_command(self.packer, 0., 0, frame))
       else:
-        can_sends.append(create_steer_command(self.packer, apply_steer, apply_steer_req, frame))
+        can_sends.append(create_steer_command(self.packer, apply_angle, apply_steer_req, frame))
 
-    if self.angle_control:
-      can_sends.append(create_ipas_steer_command(self.packer, apply_angle, self.steer_angle_enabled,
-                                                 ECU.APGS in self.fake_ecus))
-    elif ECU.APGS in self.fake_ecus:
-      can_sends.append(create_ipas_steer_command(self.packer, 0, 0, True))
-
+        
     # accel cmd comes from DSU, but we can spam can to cancel the system even if we are using lat only control
     if (frame % 3 == 0 and ECU.DSU in self.fake_ecus) or (pcm_cancel_cmd and ECU.CAM in self.fake_ecus):
       if ECU.DSU in self.fake_ecus:
@@ -212,6 +221,7 @@ class CarController(object):
       else:
         can_sends.append(create_accel_command(self.packer, 0, pcm_cancel_cmd, False))
 
+'''       
     if frame % 10 == 0 and ECU.CAM in self.fake_ecus and self.car_fingerprint not in NO_DSU_CAR:
       for addr in TARGET_IDS:
         can_sends.append(create_video_target(frame/10, addr))
@@ -232,9 +242,9 @@ class CarController(object):
     if (frame % 100 == 0 or send_ui) and ECU.CAM in self.fake_ecus:
       can_sends.append(create_ui_command(self.packer, steer, sound1, sound2))
       can_sends.append(create_fcw_command(self.packer, fcw))
-
+'''
     #*** static msgs ***
-
+'''
     for (addr, ecu, cars, bus, fr_step, vl) in STATIC_MSGS:
       if frame % fr_step == 0 and ecu in self.fake_ecus and self.car_fingerprint in cars:
         # special cases
@@ -250,6 +260,6 @@ class CarController(object):
           vl += chr(cnt)
 
         can_sends.append(make_can_msg(addr, vl, bus, False))
-
+'''
 
     sendcan.send(can_list_to_can_capnp(can_sends, msgtype='sendcan').to_bytes())
