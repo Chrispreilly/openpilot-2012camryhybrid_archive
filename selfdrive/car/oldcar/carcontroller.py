@@ -128,7 +128,7 @@ class CarController(object):
 
     # steer torque
     apply_steer = int(round(actuators.steer * STEER_MAX))
-'''
+
     max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
     min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
 
@@ -153,7 +153,7 @@ class CarController(object):
       ipas_state_transition(self.steer_angle_enabled, enabled, CS.ipas_active, self.ipas_reset_counter)
     #print self.steer_angle_enabled, self.ipas_reset_counter, CS.ipas_active
 
-'''
+
     # steer angle
     if enabled:
       apply_angle = actuators.steerAngle
