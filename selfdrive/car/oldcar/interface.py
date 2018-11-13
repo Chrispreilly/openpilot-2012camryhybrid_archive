@@ -202,11 +202,14 @@ class CarInterface(object):
     ret.steeringPressed = self.CS.steer_override
     
     # Double Stalk Pull Logic
-    if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False):
+    if (self.CS.cruise_stalk_pull != self.last_cruise_stalk_pull):
       self.cruise_stalk_pull_time = (sec_since_boot() * 1e3)
       if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000):
-        #Stalk pulled twice, enable
-        self.user_enabled = True 
+        #Stalk pulled twice, enable or disable
+        if (self.user_enabled == True):
+          self.user_enabled = False
+        else:
+          self.user_enabled = True
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
 
