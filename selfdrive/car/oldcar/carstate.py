@@ -60,8 +60,6 @@ def get_can_parser(CP):
     #("EPS_STATUS", 25),
   ]
 
-  if CP.carFingerprint == CAR.PRIUS:
-    signals += [("STATE", "AUTOPARK_STATUS", 0)]
 
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
 
