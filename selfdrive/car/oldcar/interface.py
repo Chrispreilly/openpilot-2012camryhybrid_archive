@@ -7,6 +7,7 @@ from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 from selfdrive.car.oldcar.values import ECU, check_ecu_msgs, CAR
 from selfdrive.swaglog import cloudlog
+import time
 
 try:
   from selfdrive.car.oldcar.carcontroller import CarController
@@ -24,6 +25,15 @@ class CarInterface(object):
     self.brake_pressed_prev = False
     self.can_invalid_count = 0
     self.cruise_enabled_prev = False
+    
+    # Double cruise stalk pull enable
+    # On Toyota CamryH pulling the stalk is the cancel command
+    self.last_cruise_stalk_pull_time = 0
+    self.cruise_stalk_pull_time = 0
+    #self.cruise_stalk_pull = False in carstate
+    self.last_cruise_stalk_pull = False
+    self.double_stalk_pull = False
+    self.user_enabled = False
 
     # *** init the major players ***
     self.CS = CarState(CP)
@@ -72,26 +82,6 @@ class CarInterface(object):
     ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
     ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
 
-    if candidate == CAR.PRIUS:
-      ret.safetyParam = 66  # see conversion factor for STEER_TORQUE_EPS in dbc file
-      ret.wheelbase = 2.70
-      ret.steerRatio = 15.00   # unknown end-to-end spec
-      tire_stiffness_factor = 0.6371   # hand-tune
-      ret.mass = 3045 * CV.LB_TO_KG + std_cargo
-      ret.steerKpV, ret.steerKiV = [[0.4], [0.01]]
-      ret.steerKf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
-      # TODO: Prius seem to have very laggy actuators. Understand if it is lag or hysteresis
-      ret.steerActuatorDelay = 0.25
-
-    elif candidate in [CAR.RAV4, CAR.RAV4H]:
-      ret.safetyParam = 73  # see conversion factor for STEER_TORQUE_EPS in dbc file
-      ret.wheelbase = 2.65
-      ret.steerRatio = 16.30   # 14.5 is spec end-to-end
-      tire_stiffness_factor = 0.5533
-      ret.mass = 3650 * CV.LB_TO_KG + std_cargo  # mean between normal and hybrid
-      ret.steerKpV, ret.steerKiV = [[0.6], [0.05]]
-      ret.steerKf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
-
     elif candidate == CAR.COROLLA:
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.70
@@ -101,40 +91,13 @@ class CarInterface(object):
       ret.steerKpV, ret.steerKiV = [[0.2], [0.05]]
       ret.steerKf = 0.00003   # full torque for 20 deg at 80mph means 0.00007818594
 
-    elif candidate == CAR.LEXUS_RXH:
-      ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
-      ret.wheelbase = 2.79
-      ret.steerRatio = 16.  # 14.8 is spec end-to-end
-      tire_stiffness_factor = 0.444  # not optimized yet
-      ret.mass = 4481 * CV.LB_TO_KG + std_cargo  # mean between min and max
-      ret.steerKpV, ret.steerKiV = [[0.6], [0.1]]
-      ret.steerKf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
-
-    elif candidate in [CAR.CHR, CAR.CHRH]:
-      ret.safetyParam = 100
-      ret.wheelbase = 2.63906
-      ret.steerRatio = 13.6
-      tire_stiffness_factor = 0.7933
-      ret.mass = 3300. * CV.LB_TO_KG + std_cargo
-      ret.steerKpV, ret.steerKiV = [[0.723], [0.0428]]
-      ret.steerKf = 0.00006
-
-    elif candidate in [CAR.CAMRY, CAR.CAMRYH]:
+    elif candidate == CAR.CAMRYH:
       ret.safetyParam = 100
       ret.wheelbase = 2.82448
       ret.steerRatio = 13.7
       tire_stiffness_factor = 0.7933
       ret.mass = 3400 * CV.LB_TO_KG + std_cargo #mean between normal and hybrid
       ret.steerKpV, ret.steerKiV = [[0.6], [0.1]]
-      ret.steerKf = 0.00006
-
-    elif candidate in [CAR.HIGHLANDER, CAR.HIGHLANDERH]:
-      ret.safetyParam = 100
-      ret.wheelbase = 2.78
-      ret.steerRatio = 16.0
-      tire_stiffness_factor = 0.444 # not optimized yet
-      ret.mass = 4607 * CV.LB_TO_KG + std_cargo #mean between normal and hybrid limited
-      ret.steerKpV, ret.steerKiV = [[0.6], [0.05]]
       ret.steerKf = 0.00006
 
     ret.steerRateCost = 1.
@@ -146,10 +109,9 @@ class CarInterface(object):
     # min speed to enable ACC. if car can do stop and go, then set enabling speed
     # to a negative value, so it won't matter.
     # hybrid models can't do stop and go even though the stock ACC can't
-    if candidate in [CAR.PRIUS, CAR.RAV4H, CAR.LEXUS_RXH, CAR.CHR,
-                     CAR.CHRH, CAR.CAMRY, CAR.CAMRYH, CAR.HIGHLANDERH, CAR.HIGHLANDER]:
+    if candidate in [CAR.CAMRYH]:
       ret.minEnableSpeed = -1.
-    elif candidate in [CAR.RAV4, CAR.COROLLA]: # TODO: hack ICE to do stop and go
+    elif candidate in [CAR.COROLLA]: # TODO: hack ICE to do stop and go
       ret.minEnableSpeed = 19. * CV.MPH_TO_MS
 
     centerToRear = ret.wheelbase - ret.centerToFront
@@ -238,13 +200,22 @@ class CarInterface(object):
 
     ret.steeringTorque = self.CS.steer_torque_driver
     ret.steeringPressed = self.CS.steer_override
+    
+    # Double Stalk Pull Logic
+    if (self.CS.cruise_stalk_pull == True and self.last_cruise_stalk_pull == False):
+      self.cruise_stalk_pull_time = (sec_since_boot() * 1e3)
+      if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 1000):
+        #Stalk pulled twice, enable
+        self.user_enabled = True 
+      self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
+    self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
 
     # cruise state
-    ret.cruiseState.enabled = self.CS.pcm_acc_status != 0
+    ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.KPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
-    if self.CP.carFingerprint in [CAR.RAV4H, CAR.HIGHLANDERH, CAR.HIGHLANDER]:
+    if self.CP.carFingerprint in [CAR.CAMRYH]:
       # ignore standstill in hybrid vehicles, since pcm allows to restart without
       # receiving any special command
       ret.cruiseState.standstill = False
@@ -326,6 +297,11 @@ class CarInterface(object):
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
+    
+    #Disable if brake pressed
+    if self.CS.brake_pressed > 0 and self.user_enabled == True:
+      self.user_enabled = False
+      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
 
     return ret.as_reader()
 
