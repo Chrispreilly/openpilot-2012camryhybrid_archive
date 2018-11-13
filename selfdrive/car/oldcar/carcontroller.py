@@ -55,6 +55,7 @@ class CarController(object):
     self.last_steer = 0
     self.last_angle = 0
     self.accel_steady = 0.
+    self.angle_send = 0
     self.car_fingerprint = car_fingerprint
     self.alert_active = False
     self.last_standstill = False
@@ -111,6 +112,8 @@ class CarController(object):
     if CS.left_blinker_on or CS.right_blinker_on:
       apply_steer_req = 0
     
+    angle_send = apply_angle * 100
+    
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
@@ -129,7 +132,7 @@ class CarController(object):
       if self.angle_control:
         can_sends.append(create_steer_command(self.packer, 0., 0, frame))
       else:
-        can_sends.append(create_steer_command(self.packer, apply_angle, apply_steer_req, frame))
+        can_sends.append(create_steer_command(self.packer, angle_send, apply_steer_req, frame))
 
         
     # accel cmd comes from DSU, but we can spam can to cancel the system even if we are using lat only control
