@@ -77,6 +77,15 @@ class CarController(object):
   def update(self, sendcan, enabled, CS, frame, actuators,
              pcm_cancel_cmd, hud_alert, audible_alert):
 
+    #update custom UI buttons and alerts
+    CS.UE.update_custom_ui()
+    if (frame % 1000 == 0):
+      CS.cstm_btns.send_button_info()
+      CS.UE.uiSetCarEvent(CS.cstm_btns.car_folder,CS.cstm_btns.car_name)
+    
+    
+    
+    
     # *** compute control surfaces ***
 
     # gas and brake
@@ -125,9 +134,9 @@ class CarController(object):
     else:
       apply_steer_req = 1
       
-    #If blinker on, apply_steer_req = 0 until released
-    if CS.left_blinker_on or CS.right_blinker_on:
-      apply_steer_req = 0
+    #If blinker on, apply_steer_req = 0 until released, comment out if alca being used
+    #if CS.left_blinker_on or CS.right_blinker_on:
+    #  apply_steer_req = 0
     
     angle_send = apply_angle * 100
     
