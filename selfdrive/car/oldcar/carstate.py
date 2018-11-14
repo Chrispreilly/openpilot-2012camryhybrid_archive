@@ -230,7 +230,7 @@ class CarState(object):
     
     
     #Below values never update
-    
+    self.blind_spot_on = bool(0)
     can_gear = int(cp.vl["GEAR_PACKET"]['GEAR'])
     self.main_on = 1 #cp.vl["PCM_CRUISE_2"]['MAIN_ON'] #1
     self.low_speed_lockout = 0 #cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
