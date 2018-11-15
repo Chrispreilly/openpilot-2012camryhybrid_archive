@@ -105,7 +105,7 @@ class ALCAController(object):
     self.laneChange_duration = 5 # how many max seconds to actually do the move; if lane not found after this then send error
     self.laneChange_after_lane_duration_mult = 1.  # multiplier for time after we cross the line before we let OP take over; multiplied with CL_TIMEA_T 
     self.laneChange_wait = 2 # how many seconds to wait before it starts the change
-    self.laneChange_lw = 3.0 # lane width in meters
+    self.laneChange_lw = 3.7 #3.0 # lane width in meters
     self.laneChange_angle = 0. # saves the last angle from actuators before lane change starts
     self.laneChange_angled = 0. # angle delta
     self.laneChange_steerr = 13.7 #16.00 # steer ratio for lane change
