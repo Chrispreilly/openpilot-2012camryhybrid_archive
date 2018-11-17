@@ -304,7 +304,7 @@ class CarInterface(object):
     #Disable if brake pressed
     if self.CS.brake_pressed > 0 and self.user_enabled == True:
       self.user_enabled = False
-      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
 
     return ret.as_reader()
 
