@@ -109,7 +109,7 @@ class CarController(object):
       apply_steer_req = 1
       
     #If blinker on, apply_steer_req = 0 until released
-    if CS.left_blinker_on or CS.right_blinker_on:
+    if CS.left_blinker_on or CS.right_blinker_on or CS.brake_pressed:
       apply_steer_req = 0
     
     angle_send = apply_angle * 100
