@@ -128,7 +128,7 @@ class CarController(object):
     apply_angle = alca_angle
 
     #Disable if not enabled
-    if not enabled:
+    if not enabled or CS.brake_pressed:
       apply_angle = 0
       apply_steer_req = 0
     else:
