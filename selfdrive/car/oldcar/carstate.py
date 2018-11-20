@@ -165,7 +165,7 @@ class CarState(object):
           if self.cstm_btns.btns[id].btn_label2 == self.alcaLabels[self.alcaMode]:
             self.alcaMode = (self.alcaMode + 1 ) % 3
           else:
-            self.alcaMode = 0
+            self.alcaMode = 1
           self.cstm_btns.btns[id].btn_label2 = self.alcaLabels[self.alcaMode]
           self.cstm_btns.hasChanges = True
       else:
