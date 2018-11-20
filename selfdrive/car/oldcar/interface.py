@@ -208,8 +208,10 @@ class CarInterface(object):
         #Stalk pulled twice, enable or disable
         if (self.user_enabled == True):
           self.user_enabled = False
+          self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time - 500
         else:
           self.user_enabled = True
+          self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time - 500
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
 
