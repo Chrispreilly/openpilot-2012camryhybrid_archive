@@ -154,17 +154,17 @@ class CarController(object):
     # toyota can trace shows this message at 42Hz, with counter adding alternatively 1 and 2;
     # sending it at 100Hz seem to allow a higher rate limit, as the rate limit seems imposed
     # on consecutive messages
-    if enabled:
-      if self.angle_control:
-        can_sends.append(create_steer_command(self.packer, 0., 0, frame))
-      else:
-        can_sends.append(create_steer_command(self.packer, angle_send, apply_steer_req, frame))
+    #if enabled:
+      #if self.angle_control:
+       # can_sends.append(create_steer_command(self.packer, 0., 0, frame))
+      #else:
+    can_sends.append(create_steer_command(self.packer, angle_send, apply_steer_req, frame))
 
         
     # accel cmd comes from DSU, but we can spam can to cancel the system even if we are using lat only control
     if (frame % 3 == 0 and ECU.DSU in self.fake_ecus) or (pcm_cancel_cmd and ECU.CAM in self.fake_ecus):
       if ECU.DSU in self.fake_ecus:
-        can_sends.append(create_accel_command(self.packer, apply_accel, pcm_cancel_cmd, self.standstill_req))
+        can_sends.append(create_accel_cgommand(self.packer, apply_accel, pcm_cancel_cmd, self.standstill_req))
       else:
         can_sends.append(create_accel_command(self.packer, 0, pcm_cancel_cmd, False))
 
