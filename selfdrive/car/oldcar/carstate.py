@@ -112,7 +112,7 @@ class CarState(object):
     self.CL_CORRECTION_FACTOR_BP = [10., 32., 44.]
      #duration after we cross the line until we release is a factor of speed
     self.CL_TIMEA_BP = [10., 32., 44.]
-    self.CL_TIMEA_T = [0.7 ,0.30, 0.40]# Old test -[0.7 ,0.60, 0.70]#
+    self.CL_TIMEA_T = [0.7 ,0.30, 0.20]# Old test -[0.7 ,0.60, 0.70]#
     #duration to wait (in seconds) with blinkers on before starting to turn
     self.CL_WAIT_BEFORE_START = 0.5 #1
     #END OF ALCA PARAMS
