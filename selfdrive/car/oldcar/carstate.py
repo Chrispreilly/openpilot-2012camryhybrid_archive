@@ -114,7 +114,7 @@ class CarState(object):
     self.CL_TIMEA_BP = [10., 32., 44.]
     self.CL_TIMEA_T = [0.7 ,0.30, 0.20]# Old test -[0.7 ,0.60, 0.70]#
     #duration to wait (in seconds) with blinkers on before starting to turn
-    self.CL_WAIT_BEFORE_START = 0.5 #1
+    self.CL_WAIT_BEFORE_START = 0.2 #1
     #END OF ALCA PARAMS
    
     
