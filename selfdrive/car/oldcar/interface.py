@@ -94,7 +94,7 @@ class CarInterface(object):
     elif candidate == CAR.CAMRYH:
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.82448
-      ret.steerRatio = 13.7  # official specs say 14.8, but it does not seem right
+      ret.steerRatio = 15.8  # official specs say 14.8, but it does not seem right
       ret.mass = 3400 * CV.LB_TO_KG + std_cargo  # mean between min and max
       ret.steerKpV, ret.steerKiV = [[0.6], [0.1]]
       ret.steerKf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
