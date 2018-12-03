@@ -80,7 +80,7 @@ class CarInterface(object):
     tireStiffnessRear_civic = 202500
 
 ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
-    ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
+    ret.steerActuatorDelay = 0.16  # Default delay, Prius has larger delay
 
     if candidate == CAR.COROLLA:
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
@@ -94,7 +94,7 @@ ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
     elif candidate == CAR.CAMRYH:
       ret.safetyParam = 100
       ret.wheelbase = 2.77622
-      ret.steerRatio = 14.8
+      ret.steerRatio = 15.8 #hand tune
       tire_stiffness_factor = 0.7933
       ret.mass = 3400 * CV.LB_TO_KG + std_cargo #mean between normal and hybrid
       ret.steerKpV, ret.steerKiV = [[0.6], [0.1]]
