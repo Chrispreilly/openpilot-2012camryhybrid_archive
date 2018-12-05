@@ -61,7 +61,7 @@ class CarInterface(object):
 
     ret = car.CarParams.new_message()
 
-    ret.carName = "toyota"
+    ret.carName = "oldcar"
     ret.carFingerprint = candidate
 
     ret.safetyModel = car.CarParams.SafetyModels.toyota
@@ -129,13 +129,17 @@ ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
                             ret.mass / mass_civic * \
                             (ret.centerToFront / ret.wheelbase) / (centerToFront_civic / wheelbase_civic)
 
-    # no rear steering, at least on the listed cars above
+       # no rear steering, at least on the listed cars above
     ret.steerRatioRear = 0.
-    ret.steerControlType = car.CarParams.SteerControlType.torque
+    ret.steerControlType = car.CarParams.SteerControlType.angle
+    
+    #Imported through tesla  no max steer limit VS speed
+    ret.steerMaxBP = [0.,15.]  # m/s
+    ret.steerMaxV = [420.,420.]   # max steer allowed
 
     # steer, gas, brake limitations VS speed
-    ret.steerMaxBP = [16. * CV.KPH_TO_MS, 45. * CV.KPH_TO_MS]  # breakpoints at 1 and 40 kph
-    ret.steerMaxV = [1., 1.]  # 2/3rd torque allowed above 45 kph
+    #ret.steerMaxBP = [16. * CV.KPH_TO_MS, 45. * CV.KPH_TO_MS]  # breakpoints at 1 and 40 kph
+    #ret.steerMaxV = [1., 1.]  # 2/3rd torque allowed above 45 kph
     ret.gasMaxBP = [0.]
     ret.gasMaxV = [0.5]
     ret.brakeMaxBP = [5., 20.]
