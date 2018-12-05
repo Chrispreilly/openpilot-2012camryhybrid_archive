@@ -138,8 +138,8 @@ class CarInterface(object):
     ret.steerMaxV = [420.,420.]   # max steer allowed
 
     # steer, gas, brake limitations VS speed
-    ret.steerMaxBP = [16. * CV.KPH_TO_MS, 45. * CV.KPH_TO_MS]  # breakpoints at 1 and 40 kph
-    ret.steerMaxV = [1., 1.]  # 2/3rd torque allowed above 45 kph
+    #ret.steerMaxBP = [16. * CV.KPH_TO_MS, 45. * CV.KPH_TO_MS]  # breakpoints at 1 and 40 kph
+    #ret.steerMaxV = [1., 1.]  # 2/3rd torque allowed above 45 kph
     ret.gasMaxBP = [0.]
     ret.gasMaxV = [0.5]
     ret.brakeMaxBP = [5., 20.]
