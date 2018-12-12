@@ -98,7 +98,7 @@ class CarState(object):
     self.CL_LANE_PASS_TIME = [40.,10., 3.] 
      # change lane delta angles and other params
     self.CL_MAXD_BP = [10., 32., 44.]
-    self.CL_MAXD_A = [.358, 0.084, 0.062] #delta angle based on speed; needs fine tune, based on Tesla steer ratio of 16.75
+    self.CL_MAXD_A = [.358, 0.084, 0.072] #delta angle based on speed; needs fine tune, based on Tesla steer ratio of 16.75
     self.CL_MIN_V = 8.9 # do not turn if speed less than x m/2; 20 mph = 8.9 m/s
      # do not turn if actuator wants more than x deg for going straight; this should be interp based on speed
     self.CL_MAX_A_BP = [10., 44.]
@@ -112,7 +112,7 @@ class CarState(object):
     self.CL_CORRECTION_FACTOR_BP = [10., 32., 44.]
      #duration after we cross the line until we release is a factor of speed
     self.CL_TIMEA_BP = [10., 32., 44.]
-    self.CL_TIMEA_T = [0.7 ,0.30, 0.20]# Old test -[0.7 ,0.60, 0.70]#
+    self.CL_TIMEA_T = [0.7 ,0.30, 0.30]# Old test -[0.7 ,0.60, 0.70]#
     #duration to wait (in seconds) with blinkers on before starting to turn
     self.CL_WAIT_BEFORE_START = 0.2 #1
     #END OF ALCA PARAMS
