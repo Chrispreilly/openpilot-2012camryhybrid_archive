@@ -61,7 +61,7 @@ class CarInterface(object):
 
     ret = car.CarParams.new_message()
 
-    ret.carName = "toyota"
+    ret.carName = "oldcar"
     ret.carFingerprint = candidate
 
     ret.safetyModel = car.CarParams.SafetyModels.toyota
