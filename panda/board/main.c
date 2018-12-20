@@ -106,13 +106,13 @@ int get_health_pkt(void *dat) {
 #ifdef PANDA
   health->current = adc_get(ADCCHAN_CURRENT);
   int safety_ignition = safety_ignition_hook();
-  if (true) { // (safety_ignition < 0) {
+  //if (true) { // (safety_ignition < 0) {
     //Use the GPIO pin to determine ignition
-    health->started = (GPIOA->IDR & (1 << 1)) == 0;
-  } else {
+  health->started = (GPIOA->IDR & (1 << 1)) == 0;
+  //} else {
     //Current safety hooks want to determine ignition (ex: GM)
-    health->started = safety_ignition;
-  }
+    //health->started = safety_ignition;
+  //}
 #else
   health->current = 0;
   health->started = (GPIOC->IDR & (1 << 13)) != 0;
