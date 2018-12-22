@@ -241,7 +241,7 @@ def thermald_thread():
     ignition_seen = ignition_seen or ignition
 
     # add voltage check for ignition
-    if not ignition_seen and health is not None and health.health.voltage > 12800:
+    if not ignition_seen and health is not None and health.health.voltage > 13000:
       ignition = True
 
     do_uninstall = params.get("DoUninstall") == "1"
