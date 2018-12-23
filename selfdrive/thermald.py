@@ -240,6 +240,9 @@ def thermald_thread():
     ignition = health is not None and health.health.started
     ignition_seen = ignition_seen or ignition
 
+    # Oldcar camry ignition wire is always hot, so instead sense ignition when voltage greater than 13V
+    #ignition on ~ 11.7-12.5V
+    #ignition off ~ 13.2-13.7V
     # add voltage check for ignition
     if not ignition_seen and health is not None and health.health.voltage > 13000:
       ignition = True
