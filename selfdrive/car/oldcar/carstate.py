@@ -133,7 +133,7 @@ class CarState(object):
     self.v_cruise_pcm = cp.vl["PCM_CRUISE_2"]['SET_SPEED']
     self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE']
 
-    #custom dbc
+    #custom dbc, specific for camry vs corolla
     self.brake_pressed = cp.vl["BRAKE_MODULE2"]['BRAKE_PRESSED']
     self.cruise_stalk_pull = cp.vl["PCM_CRUISE_SM"]['MAIN_ON'] == 1  
     
