@@ -21,7 +21,7 @@ def make_can_msg(addr, dat, alt, cks=False):
     dat = fix(dat, addr)
   return [addr, 0, dat, alt]
 
-
+'''
 def create_video_target(frame, addr):
   counter = frame & 0xff
   msg = struct.pack("!BBBBBBB", counter, 0x03, 0xff, 0x00, 0x00, 0x00, 0x00)
@@ -50,8 +50,9 @@ def create_ipas_steer_command(packer, steer, enabled, apgs_enabled):
     return packer.make_can_msg("STEERING_IPAS", 0, values)
   else:
     return packer.make_can_msg("STEERING_IPAS_COMMA", 0, values)
+'''
 
-
+#oldcar camry sends angle command over torque command message
 def create_steer_command(packer, steer, steer_req, raw_cnt):
   """Creates a CAN message for the Toyota Steer Command."""
 
@@ -75,7 +76,7 @@ def create_accel_command(packer, accel, pcm_cancel, standstill_req):
   }
   return packer.make_can_msg("ACC_CONTROL", 0, values)
 
-
+'''
 def create_fcw_command(packer, fcw):
   values = {
     "FCW": fcw,
@@ -101,3 +102,4 @@ def create_ui_command(packer, steer, sound1, sound2):
     "LDA_ALERT": steer,
   }
   return packer.make_can_msg("LKAS_HUD", 0, values)
+  '''
