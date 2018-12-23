@@ -77,15 +77,17 @@ class CarController(object):
 
     # *** compute control surfaces ***
 
+    #Leave this here, will someday use accel...
+    
     # gas and brake
     apply_accel = actuators.gas - actuators.brake
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady, enabled)
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
-    # steer torque
+    # steer torque - leave minimum for steer torque incase it's needed
     apply_steer = int(round(actuators.steer * STEER_MAX))
 
-    # steer angle
+    # steer angle - Currently using steer angle
     if enabled:
       apply_angle = actuators.steerAngle
       angle_lim = interp(CS.v_ego, ANGLE_MAX_BP, ANGLE_MAX_V)
@@ -108,10 +110,11 @@ class CarController(object):
     else:
       apply_steer_req = 1
       
-    #If blinker on, apply_steer_req = 0 until released
+    #If blinker on, apply_steer_req = 0 until released. This allows a smooth lane change
     if CS.left_blinker_on or CS.right_blinker_on or CS.brake_pressed:
       apply_steer_req = 0
     
+    #Multply by 100 to allow 2 decmals sent over CAN. Arduino will divde by 100.
     angle_send = apply_angle * 100
     
 
@@ -122,16 +125,7 @@ class CarController(object):
 
     can_sends = []
 
-    #*** control msgs ***
-    #print "steer", apply_steer, min_lim, max_lim, CS.steer_torque_motor
-
-    # toyota can trace shows this message at 42Hz, with counter adding alternatively 1 and 2;
-    # sending it at 100Hz seem to allow a higher rate limit, as the rate limit seems imposed
-    # on consecutive messages
-   # if enabled:
-     # if self.angle_control:
-       # can_sends.append(create_steer_command(self.packer, 0., 0, frame))
-      #else:
+    #Always send CAN steer message
     can_sends.append(create_steer_command(self.packer, angle_send, apply_steer_req, frame))
 
         
