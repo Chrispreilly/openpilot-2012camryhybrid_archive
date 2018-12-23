@@ -27,7 +27,7 @@ class CarInterface(object):
     self.cruise_enabled_prev = False
     
     # Double cruise stalk pull enable
-    # On Toyota CamryH pulling the stalk is the cancel command
+    # Tap cruise on/off 2 times to enable/disable
     self.last_cruise_stalk_pull_time = 0
     self.cruise_stalk_pull_time = 0
     #self.cruise_stalk_pull = False in carstate
@@ -206,6 +206,7 @@ class CarInterface(object):
     ret.steeringPressed = self.CS.steer_override
     
     # Double Stalk Pull Logic
+    # Tap cruise on/off 2 times to enable/disable
     if (self.CS.cruise_stalk_pull != self.last_cruise_stalk_pull):
       self.cruise_stalk_pull_time = (sec_since_boot() * 1e3)
       if ((self.cruise_stalk_pull_time - self.last_cruise_stalk_pull_time) < 500):
