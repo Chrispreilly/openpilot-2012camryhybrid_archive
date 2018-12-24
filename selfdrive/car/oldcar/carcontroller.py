@@ -3,6 +3,7 @@ from selfdrive.boardd.boardd import can_list_to_can_capnp
 from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, create_accel_command
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS, NO_DSU_CAR
 from selfdrive.can.packer import CANPacker
+from selfdrive.car.modules.ALCA_module import ALCAController
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
