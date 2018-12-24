@@ -61,16 +61,24 @@ class CarController(object):
 
     self.steer_angle_enabled = False
     self.ipas_reset_counter = 0
+    self.last_fault_frame = -200
 
     self.fake_ecus = set()
     if enable_camera: self.fake_ecus.add(ECU.CAM)
     if enable_dsu: self.fake_ecus.add(ECU.DSU)
     if enable_apg: self.fake_ecus.add(ECU.APGS)
+    self.ALCA = ALCAController(self,True,True)  # Enabled True and SteerByAngle True
 
     self.packer = CANPacker(dbc_name)
 
   def update(self, sendcan, enabled, CS, frame, actuators,
              pcm_cancel_cmd, hud_alert, audible_alert):
+    
+    #update custom UI buttons and alerts
+    CS.UE.update_custom_ui()
+    if (frame % 1000 == 0):
+      CS.cstm_btns.send_button_info()
+      CS.UE.uiSetCarEvent(CS.cstm_btns.car_folder,CS.cstm_btns.car_name)
 
     # *** compute control surfaces ***
 
@@ -100,6 +108,22 @@ class CarController(object):
     else:
       apply_angle = CS.angle_steers
 
+    # Get the angle from ALCA.
+    alca_enabled = False
+    alca_steer = 0.
+    alca_angle = 0.
+    turn_signal_needed = 0
+    # Update ALCA status and custom button every 0.1 sec.
+    if self.ALCA.pid == None:
+      self.ALCA.set_pid(CS)
+    if (frame % 10 == 0):
+      self.ALCA.update_status(CS.cstm_btns.get_button_status("alca") > 0)
+    # steer torque
+    alca_angle, alca_steer, alca_enabled, turn_signal_needed = self.ALCA.update(enabled, CS, frame, actuators)
+    apply_steer = int(round(alca_steer * STEER_MAX))
+    apply_angle = alca_angle
+     
+      
     #Disable if not enabled
     if not enabled:
       apply_angle = 0
