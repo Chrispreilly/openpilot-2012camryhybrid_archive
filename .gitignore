@@ -31,5 +31,7 @@ selfdrive/ui/ui
 selfdrive/test/tests/plant/out
 /src/
 
-one
- 
+oncode/*.json
+launch_chffrplus.sh
+
+

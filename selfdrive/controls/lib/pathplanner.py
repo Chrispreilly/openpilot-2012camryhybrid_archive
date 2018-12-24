@@ -14,7 +14,7 @@ class PathPlanner(object):
 
     self.lane_width_estimate = 2.9 #3.7
     self.lane_width_certainty = 1.0
-    self.lane_width = 3.7
+    self.lane_width = 2.9  #3.7
 
   def update(self, v_ego, md):
     if md is not None:
