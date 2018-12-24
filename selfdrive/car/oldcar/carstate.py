@@ -130,7 +130,19 @@ class CarState(object):
     self.shifter_values = self.can_define.dv["GEAR_PACKET"]['GEAR']
     self.left_blinker_on = 0
     self.right_blinker_on = 0
-
+    
+     #BB UIEvents
+    self.UE = UIEvents(self)
+     #BB variable for custom buttons
+    self.cstm_btns = UIButtons(self,"Toyota","toyota")
+     #BB pid holder for ALCA
+    self.pid = None
+     #BB custom message counter
+    self.custom_alert_counter = -1 #set to 100 for 1 second display; carcontroller will take down to zero
+ 
+    
+    
+    
     # initialize can parser
     self.car_fingerprint = CP.carFingerprint
 
