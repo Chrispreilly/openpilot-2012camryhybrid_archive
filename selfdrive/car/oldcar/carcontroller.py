@@ -70,7 +70,7 @@ class CarController(object):
     if enable_camera: self.fake_ecus.add(ECU.CAM)
     if enable_dsu: self.fake_ecus.add(ECU.DSU)
     if enable_apg: self.fake_ecus.add(ECU.APGS)
-    self.ALCA = ALCAController(self,True,False)  # Enabled True and SteerByAngle only False
+    self.ALCA = ALCAController(self,True,True)  # Enabled True and SteerByAngle only True
 
     self.packer = CANPacker(dbc_name)
 
