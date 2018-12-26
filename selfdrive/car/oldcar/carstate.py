@@ -86,6 +86,11 @@ class CarState(object):
                          K=np.matrix([[0.12287673], [0.29666309]]))
     self.v_ego = 0.0
 
+    #init variable for safety shutoff
+    self.enabled_time = 0
+    self.desired_angle = 0.
+    self.current_angle = 0.
+    
   def update(self, cp):
     # copy can_valid
     self.can_valid = cp.can_valid
@@ -93,7 +98,6 @@ class CarState(object):
     # update prevs, update must run once per loop
     self.prev_left_blinker_on = self.left_blinker_on
     self.prev_right_blinker_on = self.right_blinker_on
-
 
 
     self.pedal_gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']
