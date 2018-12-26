@@ -34,6 +34,7 @@ class CarInterface(object):
     self.last_cruise_stalk_pull = False
     self.double_stalk_pull = False
     self.user_enabled = False
+    self.current_time = 0
 
     # *** init the major players ***
     self.CS = CarState(CP)
@@ -216,8 +217,11 @@ class CarInterface(object):
           self.user_enabled = False
         else:
           self.user_enabled = True
+          self.CS.enabled_time = (sec_since_boot() * 1e3)
       self.last_cruise_stalk_pull_time = self.cruise_stalk_pull_time
     self.last_cruise_stalk_pull = self.CS.cruise_stalk_pull
+    
+    self.current_time = (sec_since_boot() * 1e3)
 
     # cruise state
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
@@ -312,6 +316,11 @@ class CarInterface(object):
     if self.CS.brake_pressed > 0 and self.user_enabled == True:
       self.user_enabled = False
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      
+    #Disable if started for over 3 seconds and delta angle >5 degrees
+    if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and ((self.current_time - self.CS.enabled_time) > 3000)
+      self.user_enabled = False
+      events.append(create_event('commIssue', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
 
     return ret.as_reader()
 
