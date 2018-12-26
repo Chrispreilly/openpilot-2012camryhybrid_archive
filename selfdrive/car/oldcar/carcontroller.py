@@ -116,7 +116,7 @@ class CarController(object):
     angle_send = apply_angle * 100
     
     #update desired angle for safety loop
-    CS.desired_angle = appy_angle
+    CS.desired_angle = apply_angle
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
