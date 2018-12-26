@@ -3,6 +3,7 @@ from selfdrive.boardd.boardd import can_list_to_can_capnp
 from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, create_accel_command
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS, NO_DSU_CAR
 from selfdrive.can.packer import CANPacker
+from selfdrive.car.oldcar.carstate import CarState, get_can_parser
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
@@ -114,6 +115,8 @@ class CarController(object):
     #Multply by 100 to allow 2 decmals sent over CAN. Arduino will divde by 100.
     angle_send = apply_angle * 100
     
+    #update desired angle for safety loop
+    CS.desired_angle = appy_angle
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
