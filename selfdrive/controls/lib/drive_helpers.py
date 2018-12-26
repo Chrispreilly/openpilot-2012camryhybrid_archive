@@ -58,9 +58,9 @@ def rate_limit(new_value, last_value, dw_step, up_step):
 def learn_angle_offset(lateral_control, v_ego, angle_offset, c_poly, c_prob, angle_steers, steer_override):
   # simple integral controller that learns how much steering offset to put to have the car going straight
   # while being in the middle of the lane
-  min_offset = -5.  # deg
-  max_offset = 5.  # deg
-  alpha = 1. / 36000.  # correct by 1 deg in 2 mins, at 30m/s, with 50cm of error, at 20Hz
+  min_offset = -8.  # deg
+  max_offset = 8.  # deg
+  alpha = 1. / 18000.  # correct by 1 deg in 2 mins, at 30m/s, with 50cm of error, at 20Hz
   min_learn_speed = 1.
 
   # learn less at low speed or when turning
