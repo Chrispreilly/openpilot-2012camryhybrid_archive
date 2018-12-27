@@ -305,17 +305,7 @@ class CarInterface(object):
 
     if ret.gasPressed:
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
-          
-    #Disable if brake pressed
-    if self.CS.brake_pressed > 0 and self.user_enabled == True:
-      self.user_enabled = False
-      events.append(create_event('pedalPressed', [ET.USER_DISABLE]))
-    
-    #Disable if started for over 3 seconds and delta angle >5 degrees
-    #if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
-     # self.user_enabled = False
-     # events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
-      
+            
       
     ret.events = events
     ret.canMonoTimes = canMonoTimes
@@ -324,6 +314,16 @@ class CarInterface(object):
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
 
+   #Disable if brake pressed
+    if self.CS.brake_pressed > 0 and self.user_enabled == True:
+      self.user_enabled = False
+      events.append(create_event('pedalPressed', [ET.USER_DISABLE]))
+    
+    #Disable if started for over 3 seconds and delta angle >5 degrees
+    if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
+      self.user_enabled = False
+      events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
+     
 
     return ret.as_reader()
 
