@@ -4,6 +4,8 @@ from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, c
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS, NO_DSU_CAR
 from selfdrive.can.packer import CANPacker
 from selfdrive.car.modules.ALCA_module import ALCAController
+from selfdrive.car.oldcar.carstate import CarState, get_can_parser
+from common.realtime import sec_since_boot
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
@@ -136,6 +138,12 @@ class CarController(object):
     #Multply by 100 to allow 2 decmals sent over CAN. Arduino will divde by 100.
     angle_send = apply_angle * 100
     
+    #update desired angle for safety loop
+    CS.desired_angle = apply_angle
+    
+    #Reset enabled time if blinker pressed to not diable during lane change
+    if CS.left_blinker_on or CS.right_blinker_on or CS.brake_pressed:
+      self.CS.enabled_time = (sec_since_boot() * 1e3) #reset time to not trigger safety after releaaed
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
