@@ -112,7 +112,7 @@ class CarController(object):
     #If blinker on, apply_steer_req = 0 until released. This allows a smooth lane change
     if CS.left_blinker_on or CS.right_blinker_on or CS.brake_pressed:
       apply_steer_req = 0
-      self.CS.enabled_time = (sec_since_boot() * 1e3) #reset time to not trigger safety after releaaed
+      CS.enabled_time = (sec_since_boot() * 1e3) #reset time to not trigger safety after releaaed
     
     #Multply by 100 to allow 2 decmals sent over CAN. Arduino will divde by 100.
     angle_send = apply_angle * 100
