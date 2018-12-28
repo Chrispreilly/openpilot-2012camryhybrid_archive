@@ -630,5 +630,5 @@ ALERTS = [
       "TAKE CONTROL IMMEDIATELY",
       "Steer Delta Error: Check Connections",
       AlertStatus.critical, AlertSize.full,
-      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
+      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2., 3., 4.),
 ]
