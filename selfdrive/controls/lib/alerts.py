@@ -625,10 +625,4 @@ ALERTS = [
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
       
-  Alert(
-      "motorIssue",
-      "TAKE CONTROL IMMEDIATELY",
-      "Steer Delta Error: Check Connections",
-      AlertStatus.critical, AlertSize.full,
-      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2., 3., 4.),
 ]
