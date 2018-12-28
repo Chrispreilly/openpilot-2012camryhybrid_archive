@@ -143,7 +143,7 @@ class CarController(object):
     
     #Reset enabled time if blinker pressed to not diable during lane change
     if CS.left_blinker_on or CS.right_blinker_on or CS.brake_pressed:
-      self.CS.enabled_time = (sec_since_boot() * 1e3) #reset time to not trigger safety after releaaed
+      CS.enabled_time = (sec_since_boot() * 1e3) #reset time to not trigger safety after releaaed
 
     self.last_steer = apply_steer
     self.last_angle = apply_angle
