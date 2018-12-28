@@ -318,8 +318,6 @@ class CarInterface(object):
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
-      
-     # events.append(create_event('pedalPressed', [ET.USER_DISABLE]))
    
      
 
