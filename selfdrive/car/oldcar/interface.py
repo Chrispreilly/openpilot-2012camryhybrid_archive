@@ -310,7 +310,7 @@ class CarInterface(object):
     #Disable if started for over 3 seconds and delta angle >5 degrees
     if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
       self.user_enabled = False
-      events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
+      events.append(create_event('motorIssue', [ET.IMMEDIATE_DISABLE]))
       
     ret.events = events
     ret.canMonoTimes = canMonoTimes
