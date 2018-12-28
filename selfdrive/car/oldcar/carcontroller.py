@@ -4,7 +4,7 @@ from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, c
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS, NO_DSU_CAR
 from selfdrive.can.packer import CANPacker
 from selfdrive.car.oldcar.carstate import CarState, get_can_parser
-#from common.realtime import sec_since_boot
+from common.realtime import sec_since_boot
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
