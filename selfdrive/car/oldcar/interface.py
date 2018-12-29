@@ -304,7 +304,7 @@ class CarInterface(object):
       self.user_enabled = False
 
     if ret.gasPressed:
-      events.append(create_event('pedalPressed', [ET.PRE_ENABLE])
+      events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
       
     #Disable if started for over 3 seconds and delta angle >5 degrees
     if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
