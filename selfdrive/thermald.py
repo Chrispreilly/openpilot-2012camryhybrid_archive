@@ -298,7 +298,7 @@ def thermald_thread():
     # Charging management, stop charging at 80% and start at 60%
     if (msg.thermal.batteryPercent > 80):
       os.system('echo "0" > /sys/class/power_supply/battery/charging_enabled')
-    elseif (msg.thermal.batteryPercent < 60):
+    elif (msg.thermal.batteryPercent < 60):
       os.system('echo "1" > /sys/class/power_supply/battery/charging_enabled')
     
     
