@@ -295,6 +295,14 @@ def thermald_thread():
 
     charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled)
 
+    # Charging management, stop charging at 80% and start at 60%
+    if (msg.thermal.batteryPercent > 80):
+      os.system('echo "0" > /sys/class/power_supply/battery/charging_enabled')
+    elseif (msg.thermal.batteryPercent < 60):
+      os.system('echo "1" > /sys/class/power_supply/battery/charging_enabled')
+    
+    
+    
     msg.thermal.chargingDisabled = charging_disabled
     msg.thermal.chargingError = current_filter.x > 1.0   # if current is > 1A out, then charger might be off
     msg.thermal.started = started_ts is not None
