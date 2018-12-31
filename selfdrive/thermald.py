@@ -105,7 +105,7 @@ def handle_fan(max_cpu_temp, bat_temp, fan_speed):
   return fan_speed
 
 
-def check_car_battery_voltage(should_start, health, charging_disabled):
+def check_car_battery_voltage(should_start, health, charging_disabled, msg):
 
   # charging disallowed if:
   #   - there are health packets from panda, and;
