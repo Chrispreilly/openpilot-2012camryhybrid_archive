@@ -95,7 +95,7 @@ class CarInterface(object):
     elif candidate == CAR.CAMRYH:
       ret.safetyParam = 100
       ret.wheelbase = 2.77622
-      ret.steerRatio = 17.0 #14.8
+      ret.steerRatio = 18 #17 #14.8
       tire_stiffness_factor = 0.7933
       ret.mass = 3400 * CV.LB_TO_KG + std_cargo #mean between normal and hybrid
       ret.steerKpV, ret.steerKiV = [[0.6], [0.1]]
