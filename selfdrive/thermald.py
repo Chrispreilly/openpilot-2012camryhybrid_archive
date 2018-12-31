@@ -111,14 +111,16 @@ def check_car_battery_voltage(should_start, health, charging_disabled):
   #   - there are health packets from panda, and;
   #   - 12V battery voltage is too low, and;
   #   - onroad isn't started
-  if charging_disabled and (health is None or health.health.voltage > 11500):
+  #   - battery over 80%
+  if (charging_disabled and (health is None or health.health.voltage > 11500)) and msg.thermal.batteryPercent < 60:
     charging_disabled = False
     os.system('echo "1" > /sys/class/power_supply/battery/charging_enabled')
-  elif not charging_disabled and health is not None and health.health.voltage < 11000 and not should_start:
+  elif (not charging_disabled and health is not None and health.health.voltage < 11000 and not should_start) or msg.thermal.batteryPercent > 80:
     charging_disabled = True
     os.system('echo "0" > /sys/class/power_supply/battery/charging_enabled')
 
   return charging_disabled
+
 
 
 class LocationStarter(object):
@@ -293,7 +295,7 @@ def thermald_thread():
          started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
-    charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled)
+    charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled, msg)
     
     
     # Charging management, stop charging at 80% and start at 60%
