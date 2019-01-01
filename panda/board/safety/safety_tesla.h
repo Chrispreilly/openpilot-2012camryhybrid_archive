@@ -550,7 +550,7 @@ static int tesla_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd)
     //check all messages we need to also send to radar, moddified, after we receive 0x631 from radar
     //145 does not exist, we use 115 at the same frequency to trigger
     //175 does not exist, we use 118 at the same frequency to trigger and pass vehicle speed
-    if ((tesla_radar_status > 0 ) && ((addr == 0x20A ) || (addr == 0x118 ) || (addr == 0x108 ) ||  
+    if ((tesla_radar_status > 0 ) && ((addr == 0x20A ) || (addr == 0x118 ) || (addr == 0x108 ) || 
     (addr == 0x115 ) ||  (addr == 0x148 ) || (addr == 0x145)))
     {
       tesla_fwd_to_radar_modded(1, to_fwd);
