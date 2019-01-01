@@ -310,7 +310,7 @@ class CarInterface(object):
        
     #Disable if started for over 3 seconds and delta angle >5 degrees
     if (abs(self.CS.desired_angle - self.CS.angle_steers) > 8) and \
-    ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
+       ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
       # disable if angle not moving towards desired angle
       if (self.CS.desired_angle > self.CS.angle_steers):
         if not (self.CS.angle_steers > self.last_angle_steers):
