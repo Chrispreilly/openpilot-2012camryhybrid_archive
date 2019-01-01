@@ -35,6 +35,8 @@ class CarInterface(object):
     self.double_stalk_pull = False
     self.user_enabled = False
     self.current_time = 0
+    self.last_angle_steers = 0
+    
 
     # *** init the major players ***
     self.CS = CarState(CP)
@@ -309,9 +311,17 @@ class CarInterface(object):
     #Disable if started for over 3 seconds and delta angle >5 degrees
     if (abs(self.CS.desired_angle - self.CS.angle_steers) > 8) and \
        ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
-      self.user_enabled = False
-      events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
-
+      # disable if angle not moving towards desired angle
+      if (self.CS.desired_angle > self.CS.angle_steers):
+        if not (self.CS.angle_steers > self.last_angle_steers):
+        self.user_enabled = False
+        events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
+      # disable if angle not moving towards desired angle
+      elif (self.CS.desired_angle < self.CS.angle_steers):
+        if not (self.CS.angle_steers < self.last_angle_steers):
+        self.user_enabled = False
+        events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
+      
 
     ret.events = events
     ret.canMonoTimes = canMonoTimes
