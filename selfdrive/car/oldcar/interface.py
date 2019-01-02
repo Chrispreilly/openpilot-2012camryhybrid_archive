@@ -83,7 +83,7 @@ class CarInterface(object):
     tireStiffnessRear_civic = 202500
 
     ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
-    ret.steerActuatorDelay = 0.16  # Default delay, Prius has larger delay
+    ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
 
     if candidate == CAR.COROLLA:
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
@@ -309,16 +309,16 @@ class CarInterface(object):
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
       
     #Disable if started for over 3 seconds and delta angle >5 degrees
-    if (abs(self.CS.desired_angle - self.CS.angle_steers) > 8) and \
+    if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and \
        ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
       # disable if angle not moving towards desired angle
       if (self.CS.desired_angle > self.CS.angle_steers):
-        if not (self.CS.angle_steers > self.last_angle_steers):
+        if not (self.CS.angle_steers > (self.last_angle_steers - 0.2):
           self.user_enabled = False
           events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
       # disable if angle not moving towards desired angle
       elif (self.CS.desired_angle < self.CS.angle_steers):
-        if not (self.CS.angle_steers < self.last_angle_steers):
+        if not (self.CS.angle_steers < (self.last_angle_steers + 0.2)):
           self.user_enabled = False
           events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
       
