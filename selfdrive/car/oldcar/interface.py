@@ -313,12 +313,12 @@ class CarInterface(object):
        ((self.current_time - self.CS.enabled_time) > 3000) and (self.user_enabled):
       # disable if angle not moving towards desired angle
       if (self.CS.desired_angle > self.CS.angle_steers):
-        if not (self.CS.angle_steers > self.last_angle_steers):
+        if not (self.CS.angle_steers > (self.last_angle_steers - 0.2):
           self.user_enabled = False
           events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
       # disable if angle not moving towards desired angle
       elif (self.CS.desired_angle < self.CS.angle_steers):
-        if not (self.CS.angle_steers < self.last_angle_steers):
+        if not (self.CS.angle_steers < (self.last_angle_steers + 0.2)):
           self.user_enabled = False
           events.append(create_event('commIssue', [ET.IMMEDIATE_DISABLE]))
       
