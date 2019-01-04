@@ -1068,5 +1068,3 @@ void  bb_ui_poll_update( UIState *s) {
             
     }
 }
-
- 
