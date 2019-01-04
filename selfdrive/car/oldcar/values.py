@@ -47,7 +47,7 @@ STEER_THRESHOLD = 100
 
 DBC = {
   CAR.COROLLA: dbc_dict('toyota_corolla_2017_pt_generated', 'toyota_prius_2017_adas'),
-  CAR.CAMRYH: dbc_dict('toyota_corolla_2017_pt_generated', 'toyota_prius_2017_adas'),
+  CAR.CAMRYH: dbc_dict('toyota_camryh_2012_pt_generated', 'toyota_prius_2017_adas'),
 }
 
 NO_DSU_CAR = [CAR.COROLLA]
