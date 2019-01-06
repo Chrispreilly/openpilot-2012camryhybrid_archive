@@ -75,9 +75,9 @@ class CarState(object):
     self.btns_init = [["alca","ALC",["MadMax","Normal","Wifey"]], \
                       ["sound","SND",[""]], \
                       ["","",[""]], \
-                      ["","",[""]], \
-                      ["", "",[""]], \
-                      ["", "", [""]]]
+                      ["accengage","ACC",[""]], \
+                      ["upfive", "+5",[""]], \
+                      ["downfive", "-5", [""]]]
     #if (CP.carFingerprint == CAR.MODELS):
     # ALCA PARAMS
     # max REAL delta angle for correction vs actuator
