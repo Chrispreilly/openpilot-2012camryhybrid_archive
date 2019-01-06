@@ -36,6 +36,10 @@ class CarInterface(object):
     self.user_enabled = False
     self.current_time = 0
     self.last_angle_steers = 0
+    
+    #CAN check between arduino and OP
+    self.can_check = 0
+    self.last_can_check_time = 0
 
     # *** init the major players ***
     self.CS = CarState(CP)
@@ -224,6 +228,11 @@ class CarInterface(object):
     
     # for safety loop
     self.current_time = (sec_since_boot() * 1e3)
+    
+    #safety CAN check
+    if (self.can_check != self.CS.can_check):
+      self.last_can_check_time = (sec_since_boot() * 1e3)
+      self.can_check = self.CS.can_check
 
     # cruise state
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
@@ -321,6 +330,10 @@ class CarInterface(object):
         if not (self.CS.angle_steers < (self.last_angle_steers + 0.2)):
           self.user_enabled = False
           events.append(create_event('motorIssue', [ET.IMMEDIATE_DISABLE]))
+          
+    #Disable if haven't heard from arduino in 0.5 seconds
+    if ((self.current_time - self.last_can_check_time) > 500):
+      events.append(create_event('steerCANerror', [ET.IMMEDIATE_DISABLE]))
       
     ret.events = events
     ret.canMonoTimes = canMonoTimes
