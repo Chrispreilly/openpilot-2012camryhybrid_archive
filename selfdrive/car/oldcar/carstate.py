@@ -141,7 +141,7 @@ class CarState(object):
      #BB custom message counter
     self.custom_alert_counter = -1 #set to 100 for 1 second display; carcontroller will take down to zero
  
-    
+    self.v_cruise_pcm = 5 #init set speed
     
     
     # initialize can parser
@@ -206,7 +206,6 @@ class CarState(object):
     self.steer_torque_driver = cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_DRIVER']
     self.steer_torque_motor = cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_EPS']
     # we could use the override bit from dbc, but it's triggered at too high torque values
-    self.v_cruise_pcm = cp.vl["PCM_CRUISE_2"]['SET_SPEED']
     self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE']
 
     #custom dbc, specific for camry vs corolla
