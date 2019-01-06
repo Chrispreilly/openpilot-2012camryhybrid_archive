@@ -332,8 +332,8 @@ class CarInterface(object):
           events.append(create_event('motorIssue', [ET.IMMEDIATE_DISABLE]))
           
     #Disable if haven't heard from arduino in 0.5 seconds
-    if ((self.current_time - self.last_can_check_time) > 500):
-      events.append(create_event('steerCANerror', [ET.IMMEDIATE_DISABLE]))
+    #if ((self.current_time - self.last_can_check_time) > 500):
+    #  events.append(create_event('steerCANerror', [ET.IMMEDIATE_DISABLE]))
       
     ret.events = events
     ret.canMonoTimes = canMonoTimes
