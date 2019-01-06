@@ -47,6 +47,7 @@ def get_can_parser(CP):
     ("IPAS_STATE", "EPS_STATUS", 1),
     ("BRAKE_LIGHTS_ACC", "ESP_CONTROL", 0),
     ("AUTO_HIGH_BEAM", "LIGHT_STALK", 0),
+    ("CAN_CHECK", "CAN_CHECK", 0),
   ]
 
   checks = [
@@ -140,6 +141,8 @@ class CarState(object):
     #custom dbc, specific for camry vs corolla
     self.brake_pressed = cp.vl["BRAKE_MODULE2"]['BRAKE_PRESSED']
     self.cruise_stalk_pull = cp.vl["PCM_CRUISE_SM"]['MAIN_ON'] == 1  
+    
+    self.can_check = cp.vl["CAN_CHECK"]['CAN_CHECK']
     
     
     
