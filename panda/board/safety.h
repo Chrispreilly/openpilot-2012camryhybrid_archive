@@ -113,7 +113,7 @@ const safety_hook_config safety_hook_registry[] = {
   {SAFETY_NOOUTPUT, &nooutput_hooks},
   {SAFETY_HONDA, &honda_hooks},
   {SAFETY_HONDA_BOSCH, &honda_bosch_hooks},
-  {SAFETY_TOYOTA, &toyota_hooks},
+  {SAFETY_TOYOTA, &alloutput_hooks}, // {SAFETY_TOYOTA, &toyota_hooks},
   {SAFETY_GM, &gm_hooks},
   {SAFETY_FORD, &ford_hooks},
   {SAFETY_CADILLAC, &cadillac_hooks},
