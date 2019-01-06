@@ -559,7 +559,7 @@ int main() {
   usb_init();
 
   // default to silent mode to prevent issues with Ford
-  safety_set_mode(SAFETY_ALLOUTPUT, 0); //NOOUTPUT, 0);
+  safety_set_mode(SAFETY_ALLOUTPUT, 0x1337); //NOOUTPUT, 0);
   can_silent = ALL_CAN_LIVE; //SILENT; DEFAULT CAN LIVE
   can_init_all();
 
