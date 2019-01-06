@@ -72,6 +72,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     calibrationProgress @47;
     lowBattery @48;
     invalidGiraffeHonda @49;
+    motorIssue @50;
   }
 }
 
