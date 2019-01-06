@@ -40,6 +40,15 @@ class CarInterface(object):
     #CAN check between arduino and OP
     self.can_check = 0
     self.last_can_check_time = 0
+    
+    #ACC with pedal
+    self.acc_status = 0
+    self.last_acc_status = 0
+    self.speed_up = 0
+    self.last_speed_up = 0
+    self.speed_down = 0
+    self.last_speed_down = 0
+    
 
     # *** init the major players ***
     self.CS = CarState(CP)
