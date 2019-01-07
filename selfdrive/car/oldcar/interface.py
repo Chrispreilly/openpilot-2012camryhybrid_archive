@@ -49,9 +49,9 @@ class CarInterface(object):
     self.acc_status = 0
     self.last_acc_status = 1 #default last to on
     self.speed_up = 0
-    self.last_speed_up = CS.cstm_btns.get_button_label2_index("upfive")
+    self.last_speed_up = self.CS.cstm_btns.get_button_label2_index("upfive")
     self.speed_down = 0
-    self.last_speed_down = CS.cstm_btns.get_button_label2_index("downfive")
+    self.last_speed_down = self.CS.cstm_btns.get_button_label2_index("downfive")
     
 
 
@@ -246,9 +246,9 @@ class CarInterface(object):
       self.can_check = self.CS.can_check
       
       #Update speed buttons
-    self.speed_up = CS.cstm_btns.get_button_label2_index("upfive")
-    self.speed_down = CS.cstm_btns.get_button_label2_index("downfive")
-    self.acc_status = CS.cstm_btns.get_button_label2_index("accengage")
+    self.speed_up = self.CS.cstm_btns.get_button_label2_index("upfive")
+    self.speed_down = self.CS.cstm_btns.get_button_label2_index("downfive")
+    self.acc_status = self.CS.cstm_btns.get_button_label2_index("accengage")
       
       #Increase for up button push
     if (self.last_speed_up != self.speed_up):
