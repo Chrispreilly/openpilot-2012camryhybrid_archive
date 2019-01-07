@@ -53,7 +53,8 @@ class CarInterface(object):
     self.speed_down = 0
     self.last_speed_down = self.CS.cstm_btns.get_button_label2_index("downfive")
     self.last_button_time = 0
-    
+    self.starting_speed = 0
+    self.round_speed = 0
 
 
     self.cp = get_can_parser(CP)
@@ -275,7 +276,12 @@ class CarInterface(object):
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
     elif (self.acc_status != self.last_acc_status) and (self.acc_status > 0) and (self.current_time - self.last_button_time > 250):
-      self.CS.v_cruise_pcm = self.CS.v_wheel_fl
+      self.starting_speed = self.CS.v_wheel_fl * CV.MS_TO_MPH
+      self.round_speed = round(self.starting_speed, 0)
+      
+      
+      
+      self.CS.v_cruise_pcm 
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
       
