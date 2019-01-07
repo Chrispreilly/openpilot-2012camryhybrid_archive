@@ -274,6 +274,11 @@ class CarInterface(object):
       self.CS.v_cruise_pcm = 0
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
+    else if (self.acc_status != self.last_acc_status) and (self.acc_status > 0) and (self.current_time - self.last_button_time > 250):
+      self.CS.v_cruise_pcm = self.CS.v_wheel_fl
+      self.last_acc_status = self.acc_status
+      self.last_button_time = self.current_time
+      
     
 
     # cruise state
