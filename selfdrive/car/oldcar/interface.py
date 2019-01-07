@@ -26,6 +26,10 @@ class CarInterface(object):
     self.can_invalid_count = 0
     self.cruise_enabled_prev = False
     
+    
+    # *** init the major players ***
+    self.CS = CarState(CP)
+    
     # Double cruise stalk pull enable
     # 2 taps of on/off will enable/disable
     self.last_cruise_stalk_pull_time = 0
@@ -50,8 +54,6 @@ class CarInterface(object):
     self.last_speed_down = CS.cstm_btns.get_button_label2_index("downfive")
     
 
-    # *** init the major players ***
-    self.CS = CarState(CP)
 
     self.cp = get_can_parser(CP)
 
