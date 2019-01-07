@@ -299,6 +299,10 @@ class CarInterface(object):
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
       
+      #set to 0 if disengaged
+    if not self.user_enabled:
+      self.CS.v_cruise_pcm = 0
+      
 
     # cruise state
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
