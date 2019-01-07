@@ -63,7 +63,12 @@ def get_can_parser(CP):
     #("STEER_TORQUE_SENSOR", 50),
     #("EPS_STATUS", 25),
   ]
-
+  
+  
+  # add gas interceptor reading if we are using it
+  if CP.enableGasInterceptor:
+      signals.append(("INTERCEPTOR_GAS", "GAS_SENSOR", 0))
+      checks.append(("GAS_SENSOR", 50))
 
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
 
@@ -214,6 +219,10 @@ class CarState(object):
     
     self.can_check = cp.vl["CAN_CHECK"]['CAN_CHECK']
     
+    if self.CP.enableGasInterceptor:
+      self.pedal_gas = cp.vl["GAS_SENSOR"]['INTERCEPTOR_GAS']
+    else:
+      self.pedal_gas = 0 #cp.vl["GAS_PEDAL"]['GAS_PEDAL']
     
     
     #Below values never update
