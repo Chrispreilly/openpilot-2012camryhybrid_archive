@@ -43,11 +43,11 @@ class CarInterface(object):
     
     #ACC with pedal
     self.acc_status = 0
-    self.last_acc_status = 0
+    self.last_acc_status = 1 #default last to on
     self.speed_up = 0
-    self.last_speed_up = 0
+    self.last_speed_up = CS.cstm_btns.get_button_label2_index("upfive")
     self.speed_down = 0
-    self.last_speed_down = 0
+    self.last_speed_down = CS.cstm_btns.get_button_label2_index("downfive")
     
 
     # *** init the major players ***
@@ -242,10 +242,33 @@ class CarInterface(object):
     if (self.can_check != self.CS.can_check):
       self.last_can_check_time = (sec_since_boot() * 1e3)
       self.can_check = self.CS.can_check
+      
+      #Update speed buttons
+    self.speed_up = CS.cstm_btns.get_button_label2_index("upfive")
+    self.speed_down = CS.cstm_btns.get_button_label2_index("downfive")
+    self.acc_status = CS.cstm_btns.get_button_label2_index("accengage")
+      
+      #Increase for up button push
+    if (self.last_speed_up != self.speed_up):
+      self.CS.v_cruise_pcm = self.CS.v_cruise_pcm + 5
+      self.last_speed_up = self.speed_up
+      
+      #Decrease for down button push with minimum 0
+    if (self.last_speed_down != self.speed_down):
+      self.CS.v_cruise_pcm = self.CS.v_cruise_pcm - 5
+      self.last_speed_down = self.speed_down
+      if (self.CS.v_cruise_pcm < 0):
+        self.CS.v_cruise_pcm = 0
+        
+      #Turn on ACC
+    if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))):
+      self.CS.v_cruise_pcm = 0
+      self.last_acc_status = self.acc_status
+    
 
     # cruise state
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
-    ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.KPH_TO_MS
+    ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.MPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
     if self.CP.carFingerprint in [CAR.CAMRYH]:
