@@ -284,7 +284,7 @@ class CarInterface(object):
       self.last_speed_up = self.speed_up
         
       #Turn on ACC
-    if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))) and (self.current_time - self.last_button_time > 250):
+    if ( ((self.acc_status != self.last_acc_status) and not (self.acc_status > 0))) and (self.current_time - self.last_button_time > 250):
       self.CS.v_cruise_pcm = 0
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
