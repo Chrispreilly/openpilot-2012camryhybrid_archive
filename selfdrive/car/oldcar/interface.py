@@ -252,13 +252,13 @@ class CarInterface(object):
     self.acc_status = self.CS.cstm_btns.get_button_label2_index("accengage")
       
       #Increase for up button push
-    if (self.last_speed_up != self.speed_up) and (self.current_time - self.last_button_time > 250):
+    if (self.last_speed_up != self.speed_up) and (self.current_time - self.last_button_time > 500):
       self.CS.v_cruise_pcm = self.CS.v_cruise_pcm + 5
       self.last_speed_up = self.speed_up
       self.last_button_time = self.current_time
       
       #Decrease for down button push with minimum 0
-    if (self.last_speed_down != self.speed_down) and (self.current_time - self.last_button_time > 250):
+    if (self.last_speed_down != self.speed_down) and (self.current_time - self.last_button_time > 500):
       self.CS.v_cruise_pcm = self.CS.v_cruise_pcm - 5
       self.last_speed_down = self.speed_down
       self.last_button_time = self.current_time
@@ -266,7 +266,7 @@ class CarInterface(object):
         self.CS.v_cruise_pcm = 0
         
       #Turn on ACC
-    if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))) and (self.current_time - self.last_button_time > 250):
+    if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))) and (self.current_time - self.last_button_time > 500):
       self.CS.v_cruise_pcm = 0
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
