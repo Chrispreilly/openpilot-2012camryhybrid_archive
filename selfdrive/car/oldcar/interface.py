@@ -263,9 +263,9 @@ class CarInterface(object):
         self.CS.v_cruise_pcm = 0
         
       #Turn on ACC
-    if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))):
-      self.CS.v_cruise_pcm = 0
-      self.last_acc_status = self.acc_status
+   # if (not ((self.acc_status != self.last_acc_status) and (self.acc_status > 0))):
+    #  self.CS.v_cruise_pcm = 0
+     # self.last_acc_status = self.acc_status
     
 
     # cruise state
