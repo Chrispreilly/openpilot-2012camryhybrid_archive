@@ -86,7 +86,7 @@ class CarInterface(object):
     ret.safetyModel = car.CarParams.SafetyModels.toyota
 
     # pedal
-    ret.enableCruise = True
+    ret.enableCruise = not ret.enableGasInterceptor
 
     # FIXME: hardcoding honda civic 2016 touring params so they can be used to
     # scale unknown params for other cars
@@ -111,6 +111,7 @@ class CarInterface(object):
       ret.steerKf = 0.00003   # full torque for 20 deg at 80mph means 0.00007818594
 
     elif candidate == CAR.CAMRYH:
+      stop_and_go = True
       ret.safetyParam = 100
       ret.wheelbase = 2.77622
       ret.steerRatio = 18.0 #14.8
@@ -124,6 +125,8 @@ class CarInterface(object):
 
     ret.longPidDeadzoneBP = [0., 9.]
     ret.longPidDeadzoneV = [0., .15]
+    
+    ret.enableGasInterceptor = 0x201 in fingerprint
 
     # min speed to enable ACC. if car can do stop and go, then set enabling speed
     # to a negative value, so it won't matter.
@@ -159,8 +162,6 @@ class CarInterface(object):
     # steer, gas, brake limitations VS speed
     #ret.steerMaxBP = [16. * CV.KPH_TO_MS, 45. * CV.KPH_TO_MS]  # breakpoints at 1 and 40 kph
     #ret.steerMaxV = [1., 1.]  # 2/3rd torque allowed above 45 kph
-    ret.gasMaxBP = [0.]
-    ret.gasMaxV = [0.5]
     ret.brakeMaxBP = [5., 20.]
     ret.brakeMaxV = [1., 0.8]
 
@@ -171,15 +172,23 @@ class CarInterface(object):
     cloudlog.warn("ECU Camera Simulated: %r", ret.enableCamera)
     cloudlog.warn("ECU DSU Simulated: %r", ret.enableDsu)
     cloudlog.warn("ECU APGS Simulated: %r", ret.enableApgs)
+    cloudlog.warn("ECU Gas Interceptor: %r", ret.enableGasInterceptor)
 
     ret.steerLimitAlert = False
-    ret.stoppingControl = False
-    ret.startAccel = 0.0
 
     ret.longitudinalKpBP = [0., 5., 35.]
-    ret.longitudinalKpV = [3.6, 2.4, 1.5]
     ret.longitudinalKiBP = [0., 35.]
-    ret.longitudinalKiV = [0.54, 0.36]
+    
+    if ret.enableGasInterceptor:
+      ret.gasMaxBP = [0., 9., 35]
+      ret.gasMaxV = [0.2, 0.5, 0.7]
+      ret.longitudinalKpV = [1.2, 0.8, 0.5]
+      ret.longitudinalKiV = [0.18, 0.12]
+    else:
+      ret.gasMaxBP = [0.]
+      ret.gasMaxV = [0.5]
+      ret.longitudinalKpV = [3.6, 2.4, 1.5]
+      ret.longitudinalKiV = [0.54, 0.36]
 
     return ret
 
@@ -211,7 +220,11 @@ class CarInterface(object):
 
     # gas pedal
     ret.gas = self.CS.car_gas
-    ret.gasPressed = self.CS.pedal_gas > 0
+    if self.CP.enableGasInterceptor:
+    # use interceptor values to disengage on pedal press
+      ret.gasPressed = self.CS.pedal_gas > 15
+    else:
+      ret.gasPressed = self.CS.pedal_gas > 0
 
     # brake pedal
     ret.brake = self.CS.user_brake
@@ -292,7 +305,7 @@ class CarInterface(object):
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.MPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
     ret.cruiseState.speedOffset = 0.
-    if self.CP.carFingerprint in [CAR.CAMRYH]:
+    if self.CP.carFingerprint in [CAR.CAMRYH] or self.CP.enableGasInterceptor:
       # ignore standstill in hybrid vehicles, since pcm allows to restart without
       # receiving any special command
       ret.cruiseState.standstill = False
