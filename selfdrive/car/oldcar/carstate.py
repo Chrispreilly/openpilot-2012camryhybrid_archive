@@ -72,7 +72,7 @@ class CarState(object):
   def __init__(self, CP):
 
     #labels for buttons
-    self.btns_init = [["","",[]], \
+    self.btns_init = [["","",[""]], \
                       ["alca","ALC",["MadMax","Normal","Wifey"]], \
                       ["sound","SND",[""]], \
                       ["accengage","ACC",[""]], \
