@@ -276,16 +276,16 @@ class CarInterface(object):
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
     elif (self.acc_status != self.last_acc_status) and (self.acc_status > 0) and (self.current_time - self.last_button_time > 250):
-      self.starting_speed = self.CS.v_wheel_fl * CV.MS_TO_MPH
+      #always round down and keep it a factor of 5
+      self.starting_speed = (self.CS.v_wheel_fl * CV.MS_TO_MPH) / 5
       self.round_speed = round(self.starting_speed, 0)
-      
-      
-      
-      self.CS.v_cruise_pcm 
+      if (self.round_speed > self.starting_speed):
+        self.starting_speed = self.starting_speed - 0.5
+        self.round_speed = round(self.starting_speed, 0)
+      self.CS.v_cruise_pcm = self.round_speed * 5
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
       
-    
 
     # cruise state
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
