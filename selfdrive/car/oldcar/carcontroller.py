@@ -1,6 +1,6 @@
 from common.numpy_fast import clip, interp
 from selfdrive.boardd.boardd import can_list_to_can_capnp
-from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, create_accel_command
+from selfdrive.car.oldcar.oldcarcan import make_can_msg, create_steer_command, create_accel_command, create_gas_command
 from selfdrive.car.oldcar.values import ECU, STATIC_MSGS, NO_DSU_CAR
 from selfdrive.can.packer import CANPacker
 from selfdrive.car.modules.ALCA_module import ALCAController
@@ -88,7 +88,15 @@ class CarController(object):
     #Leave this here, will someday use accel...
     
     # gas and brake
-    apply_accel = actuators.gas - actuators.brake
+    apply_gas = clip(actuators.gas, 0., 1.)
+
+    if CS.CP.enableGasInterceptor:
+      # send only send brake values if interceptor is detected. otherwise, send the regular value
+	  # +0.06 offset to reduce ABS pump usage when OP is engaged
+      apply_accel = 0.06 - actuators.brake
+    else:
+      apply_accel = actuators.gas - actuators.brake   
+    
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady, enabled)
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
@@ -162,7 +170,10 @@ class CarController(object):
         can_sends.append(create_accel_command(self.packer, apply_accel, pcm_cancel_cmd, self.standstill_req))
       else:
         can_sends.append(create_accel_command(self.packer, 0, pcm_cancel_cmd, False))
-
-
+        
+    if CS.CP.enableGasInterceptor:
+        # send exactly zero if apply_gas is zero. Interceptor will send the max between read value and apply_gas.
+        # This prevents unexpected pedal range rescaling
+        can_sends.append(create_gas_command(self.packer, apply_gas)) 
 
     sendcan.send(can_list_to_can_capnp(can_sends, msgtype='sendcan').to_bytes())
