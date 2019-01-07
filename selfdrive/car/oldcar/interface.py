@@ -298,6 +298,8 @@ class CarInterface(object):
       self.CS.v_cruise_pcm = self.round_speed * 5
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
+    else:
+      self.last_acc_status = self.acc_status
       
       #set to 0 if disengaged
     if not self.user_enabled:
