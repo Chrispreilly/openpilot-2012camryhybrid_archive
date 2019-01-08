@@ -310,7 +310,7 @@ class CarInterface(object):
     ret.cruiseState.enabled = self.user_enabled #self.CS.pcm_acc_status != 0
     ret.cruiseState.speed = self.CS.v_cruise_pcm * CV.MPH_TO_MS
     ret.cruiseState.available = bool(self.CS.main_on)
-    ret.cruiseState.speedOffset = 0.
+    ret.cruiseState.speedOffset = 2.
     if self.CP.carFingerprint in [CAR.CAMRYH] or self.CP.enableGasInterceptor:
       # ignore standstill in hybrid vehicles, since pcm allows to restart without
       # receiving any special command
