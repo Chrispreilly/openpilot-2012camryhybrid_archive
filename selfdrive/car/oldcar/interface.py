@@ -38,6 +38,7 @@ class CarInterface(object):
     self.last_cruise_stalk_pull = False
     self.double_stalk_pull = False
     self.user_enabled = False
+    self.last_user_enabled = False
     self.current_time = 0
     self.last_angle_steers = 0
     
@@ -284,11 +285,11 @@ class CarInterface(object):
       self.last_speed_up = self.speed_up
         
       #Turn on ACC
-    if ( ((self.acc_status != self.last_acc_status) and not (self.acc_status > 0))) and (self.current_time - self.last_button_time > 250):
+    if not self.user_enabled: # ( ((self.acc_status != self.last_acc_status) and not (self.acc_status > 0))) and (self.current_time - self.last_button_time > 250):
       self.CS.v_cruise_pcm = 0
       self.last_acc_status = self.acc_status
       self.last_button_time = self.current_time
-    elif (self.acc_status != self.last_acc_status) and (self.acc_status > 0) and (self.current_time - self.last_button_time > 250):
+    elif (self.user_enabled != self.last_user_enabled) and self.user_enabled: #(self.acc_status > 0) and (self.current_time - self.last_button_time > 250):
       #always round down and keep it a factor of 5
       self.starting_speed = (self.CS.v_wheel_fl * CV.MS_TO_MPH) / 5
       self.round_speed = round(self.starting_speed, 0)
@@ -413,6 +414,7 @@ class CarInterface(object):
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
     self.last_angle_steers = self.CS.angle_steers
+    self.last_user_enabled = self.user_enabled 
    
      
 
