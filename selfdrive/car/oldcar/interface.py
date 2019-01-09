@@ -293,7 +293,7 @@ class CarInterface(object):
       #always round down and keep it a factor of 5
       self.starting_speed = (self.CS.v_wheel_fl * CV.MS_TO_MPH) / 5
       self.round_speed = round(self.starting_speed, 0)
-      if (self.round_speed > self.starting_speed):
+      if False: #(self.round_speed > self.starting_speed):
         self.starting_speed = self.starting_speed - 0.5
         self.round_speed = round(self.starting_speed, 0)
       self.CS.v_cruise_pcm = self.round_speed * 5
