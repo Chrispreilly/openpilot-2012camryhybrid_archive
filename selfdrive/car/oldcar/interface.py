@@ -181,8 +181,8 @@ class CarInterface(object):
     ret.longitudinalKiBP = [0., 35.]
     
     if ret.enableGasInterceptor:
-      ret.gasMaxBP = [0., 9., 35]
-      ret.gasMaxV = [0.2, 0.4, 0.6] #[0.2, 0.5, 0.7]
+      ret.gasMaxBP = [0., 3., 9., 35] #[0., 9., 35]
+      ret.gasMaxV = [0.2, 0.4, 0.5, 0.6] #[0.2, 0.5, 0.7]
       ret.longitudinalKpV = [1.2, 0.8, 0.5]
       ret.longitudinalKiV = [0.18, 0.12]
     else:
