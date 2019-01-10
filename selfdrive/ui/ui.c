@@ -1006,8 +1006,13 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   int viz_maxspeed_x = (ui_viz_rx + (bdr_s*2));
   int viz_maxspeed_y = (box_y + (bdr_s*1.5));
   int viz_maxspeed_xo = 180;
+  if (s->b.tri_state_switch != 2) {
+    viz_maxspeed_xo = 0;
+  }
   viz_maxspeed_w += viz_maxspeed_xo;
+  if (s->b.tri_state_switch == 2) {
   viz_maxspeed_x += viz_maxspeed_w - (viz_maxspeed_xo * 2);
+  }
 
   // Draw Background
   nvgBeginPath(s->vg);
@@ -1017,11 +1022,14 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   } else {
     nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 100));
   }
-  nvgFill(s->vg);
+  if (s->b.tri_state_switch != 2) {
+    nvgFill(s->vg);
+  }
 
   // Draw Border
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, viz_maxspeed_x, viz_maxspeed_y, viz_maxspeed_w, viz_maxspeed_h, 20);
+  if (s->b.tri_state_switch != 2) {
   if (is_set_over_limit) {
     nvgStrokeColor(s->vg, nvgRGBA(218, 111, 37, 255));
   } else if (is_speedlim_valid && !s->is_ego_over_limit) {
@@ -1033,7 +1041,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   }
   nvgStrokeWidth(s->vg, 10);
   nvgStroke(s->vg);
-
+  }
   // Draw "MAX" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-regular");
@@ -1263,7 +1271,9 @@ static void ui_draw_vision_header(UIState *s) {
   nvgFill(s->vg);
 
   ui_draw_vision_maxspeed(s);
-  ui_draw_vision_speedlimit(s);
+  if (s->b.tri_state_switch == 2) {
+    ui_draw_vision_speedlimit(s);
+  }
   ui_draw_vision_speed(s);
   ui_draw_vision_wheel(s);
 }
@@ -2117,17 +2127,37 @@ int main() {
     }
 
     ui_update(s);
-    //BB Update our cereal polls
-    bb_ui_poll_update(s);
+
     // awake on any touch
     int touch_x = -1, touch_y = -1;
-    int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
+    int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 100 : 500);
+    int dc_touch_x = -1, dc_touch_y = -1;
+    s->b.touch_timeout = max(s->b.touch_timeout -1,0);
+    
     if (touched == 1) {
       // touch event will still happen :(
       set_awake(s, true);
-      // BB check touch area
-      bb_handle_ui_touch(s,touch_x,touch_y);
-    }
+      s->b.touch_last = true;
+      s->b.touch_last_x = touch_x;
+      s->b.touch_last_y = touch_y;
+      s->b.touch_timeout = touch_timeout;
+      s->b.touch_last_width = s->scene.ui_viz_rw;
+    } 
+      //BB check touch
+      if ((s->b.touch_last) && (s->b.touch_last_width != s->scene.ui_viz_rw)) {
+        bb_handle_ui_touch(s,s->b.touch_last_x,s->b.touch_last_y);
+        dc_touch_x = s->b.touch_last_x;
+        dc_touch_y = s->b.touch_last_y;
+        s->b.touch_last = false;
+        s->b.touch_last_x = 0;
+        s->b.touch_last_y = 0;
+        s->b.touch_last_width=s->scene.ui_viz_rw;
+      }
+    
+    //s->b.touch_last_width = s->scene.ui_viz_rw;
+    //BB Update our cereal polls
+    bb_ui_poll_update(s);
+    
 
     // manage wakefulness
     if (s->awake_timeout > 0) {
@@ -2137,7 +2167,7 @@ int main() {
     }
 
     if (s->awake) {
-      dashcam(s, touch_x, touch_y);
+      dashcam(s, dc_touch_x, dc_touch_y);
       ui_draw(s);
       glFinish();
       should_swap = true;
