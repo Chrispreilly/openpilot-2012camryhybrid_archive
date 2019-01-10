@@ -6,7 +6,7 @@ from selfdrive.config import Conversions as CV
 from common.transformations.coordinates import LocalCoord, geodetic2ecef
 
 LOOKAHEAD_TIME = 10.
-MAPS_LOOKAHEAD_DISTANCE = 5000 * LOOKAHEAD_TIME #50 * LOOKAHEAD_TIME
+MAPS_LOOKAHEAD_DISTANCE = 500 * LOOKAHEAD_TIME #50 * LOOKAHEAD_TIME
 
 
 def circle_through_points(p1, p2, p3):
@@ -53,7 +53,7 @@ class Way:
     results, tree, real_nodes, node_to_way = query_results
 
     cur_pos = geodetic2ecef((lat, lon, 0))
-    nodes = tree.query_ball_point(cur_pos, 500)
+    nodes = tree.query_ball_point(cur_pos, 20000) #500)
 
     # If no nodes within 500m, choose closest one
     if not nodes:
