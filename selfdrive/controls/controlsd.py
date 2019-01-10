@@ -264,7 +264,7 @@ def state_control(plan, CS, CP, state, events, v_cruise_kph, v_cruise_kph_last, 
       AM.add(e, enabled, extra_text_2=extra_text)
     
   #reset PID if gas pressed  
-  if (CS.pedal_gas > 0):
+  if (CS.gasPressed):
     LoC.reset(v_pid=CS.vEgo)
 
   # Run angle offset learner at 20 Hz
