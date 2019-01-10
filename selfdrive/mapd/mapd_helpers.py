@@ -6,7 +6,7 @@ from selfdrive.config import Conversions as CV
 from common.transformations.coordinates import LocalCoord, geodetic2ecef
 
 LOOKAHEAD_TIME = 10.
-MAPS_LOOKAHEAD_DISTANCE = 5000 * LOOKAHEAD_TIME #50 * LOOKAHEAD_TIME
+MAPS_LOOKAHEAD_DISTANCE = 50 * LOOKAHEAD_TIME #50 * LOOKAHEAD_TIME
 
 
 def circle_through_points(p1, p2, p3):
