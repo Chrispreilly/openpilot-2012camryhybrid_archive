@@ -122,6 +122,9 @@ class LongControl(object):
         output_gb += STARTING_BRAKE_RATE / RATE
       self.v_pid = v_ego
       self.pid.reset()
+    
+    if (output_gb < 0):
+      output_gb = 0
 
     self.last_output_gb = output_gb
     final_gas = clip(output_gb, 0., gas_max)
