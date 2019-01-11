@@ -267,7 +267,7 @@ class CarInterface(object):
     self.acc_status = self.CS.cstm_btns.get_button_label2_index("accengage")
       
       #Increase for up button push
-    if (self.last_speed_up != self.speed_up) and (self.current_time - self.last_button_time > 250):
+    if (self.last_speed_up != self.speed_up): # and (self.current_time - self.last_button_time > 250):
       self.CS.v_cruise_pcm = self.CS.v_cruise_pcm + 5
       self.last_speed_up = self.speed_up
       self.last_button_time = self.current_time
@@ -275,7 +275,7 @@ class CarInterface(object):
       self.last_speed_up = self.speed_up
       
       #Decrease for down button push with minimum 0
-    if (self.last_speed_down != self.speed_down) and (self.current_time - self.last_button_time > 250):
+    if (self.last_speed_down != self.speed_down): # and (self.current_time - self.last_button_time > 250):
       self.CS.v_cruise_pcm = self.CS.v_cruise_pcm - 5
       self.last_speed_down = self.speed_down
       self.last_button_time = self.current_time
@@ -386,8 +386,8 @@ class CarInterface(object):
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       self.user_enabled = False
 
-    if ret.gasPressed:
-      events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
+   # if ret.gasPressed:
+   #   events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
        
     #Disable if started for over 3 seconds and delta angle >5 degrees
     if (abs(self.CS.desired_angle - self.CS.angle_steers) > 5) and \
