@@ -125,6 +125,8 @@ class LongControl(object):
     
     if (output_gb < 0):
       output_gb = 0
+      self.v_pid = v_ego
+      self.pid.reset()
 
     self.last_output_gb = output_gb
     final_gas = clip(output_gb, 0., gas_max)
