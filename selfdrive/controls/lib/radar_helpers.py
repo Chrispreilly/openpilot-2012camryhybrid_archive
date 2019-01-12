@@ -74,7 +74,7 @@ class Track(object):
       # estimate acceleration
       # TODO: use Kalman filter
       a_rel_unfilt = (self.vRel - self.vRelPrev) / ts
-      a_rel_unfilt = clip(a_rel_unfilt, -3., 3.)
+      a_rel_unfilt = clip(a_rel_unfilt, -3., 10.)
       self.aRel = k_a_lead * a_rel_unfilt + (1 - k_a_lead) * self.aRel
 
       # TODO: use Kalman filter
