@@ -87,7 +87,7 @@ class CarState(object):
     # ALCA PARAMS
     # max REAL delta angle for correction vs actuator
     self.CL_MAX_ANGLE_DELTA_BP = [10., 44.]
-    self.CL_MAX_ANGLE_DELTA = [1.8, .3]
+    self.CL_MAX_ANGLE_DELTA = [1.8, .4] #.3]
 
     # adjustment factor for merging steer angle to actuator; should be over 4; the higher the smoother
     self.CL_ADJUST_FACTOR_BP = [10., 44.]
@@ -107,7 +107,7 @@ class CarState(object):
 
     # change lane delta angles and other params
     self.CL_MAXD_BP = [10., 32., 44.]
-    self.CL_MAXD_A = [.358, 0.11, 0.072] # [.358, 0.084, 0.042]#delta angle based on speed; needs fine tune, based on Tesla steer ratio of 16.75
+    self.CL_MAXD_A = [.358, 0.11, 0.1072] # [.358, 0.084, 0.042]#delta angle based on speed; needs fine tune, based on Tesla steer ratio of 16.75
 
     self.CL_MIN_V = 8.9 # do not turn if speed less than x m/2; 20 mph = 8.9 m/s
 
