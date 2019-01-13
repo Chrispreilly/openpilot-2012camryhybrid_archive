@@ -96,7 +96,7 @@ class CarState(object):
 
     # reenrey angle when to let go
     self.CL_REENTRY_ANGLE_BP = [10., 44.]
-    self.CL_REENTRY_ANGLE = [5. , 5.]
+    self.CL_REENTRY_ANGLE = [5. , 8.]
 
     # a jump in angle above the CL_LANE_DETECT_FACTOR means we crossed the line
     self.CL_LANE_DETECT_BP = [10., 44.]
