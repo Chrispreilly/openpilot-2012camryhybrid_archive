@@ -55,7 +55,7 @@ void init(double ttcCost, double distanceCost, double accelerationCost, double j
     if (i > 4){
       f = STEP_MULTIPLIER;
     }
-    acadoVariables.W[16 * i + 0] = ttcCost * f / 20; // exponential cost for time-to-collision (ttc)
+    acadoVariables.W[16 * i + 0] = ttcCost * f / 10; // exponential cost for time-to-collision (ttc)
     acadoVariables.W[16 * i + 5] = distanceCost * f; // desired distance
     acadoVariables.W[16 * i + 10] = accelerationCost * f; // acceleration
     acadoVariables.W[16 * i + 15] = jerkCost * f; // jerk
