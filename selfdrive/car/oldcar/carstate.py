@@ -103,7 +103,7 @@ class CarState(object):
     self.CL_LANE_DETECT_FACTOR = [1.5, 1.5]
 
     self.CL_LANE_PASS_BP = [10., 20., 44.]
-    self.CL_LANE_PASS_TIME = [40.,10., 3.] 
+    self.CL_LANE_PASS_TIME = [40.,10., 5.] 
 
     # change lane delta angles and other params
     self.CL_MAXD_BP = [10., 32., 44.]
