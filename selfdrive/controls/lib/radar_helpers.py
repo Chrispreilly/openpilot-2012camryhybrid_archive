@@ -61,9 +61,6 @@ class Track(object):
     # computed velocity and accelerations
     self.vLead = self.vRel + v_ego_t_aligned
     
-    #smooth vLead
-    self.vLead = clip(self.vLead, (self.vLead - 0.1), (self.vLead + 0.1))
-
     if not self.initted:
       self.initted = True
       self.aLeadTau = _LEAD_ACCEL_TAU
