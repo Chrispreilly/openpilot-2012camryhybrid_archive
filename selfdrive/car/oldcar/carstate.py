@@ -75,12 +75,19 @@ def get_can_parser(CP):
 
 class CarState(object):
   def __init__(self, CP):
+    
+    #custom follow distance
+    self.trLabels = ["0.9","1.8","2.7"]
+    self.trMode = 1
+    self.lkMode = True
+    self.read_distance_lines_prev = 3
+    
 
     #labels for buttons
     self.btns_init = [["","",[""]], \
                       ["alca","ALC",["MadMax","Normal","Wifey"]], \
                       ["sound","SND",[""]], \
-                      ["accengage","ACC",["0","1"]], \
+                      ["accengage","SET",["0","1"]], \
                       ["upfive", "+5",["0","1"]], \
                       ["downfive", "-5", ["0","1"]]]
     #if (CP.carFingerprint == CAR.MODELS):
@@ -223,6 +230,14 @@ class CarState(object):
       self.pedal_gas = cp.vl["GAS_SENSOR"]['INTERCEPTOR_GAS']
     else:
       self.pedal_gas = 0 #cp.vl["GAS_PEDAL"]['GAS_PEDAL']
+      
+    #Custom follow distance
+    self.trMode = 0 #0, 1, 2
+    self.read_distance_lines = self.trMode + 1
+    
+    if self.read_distance_lines <> self.read_distance_lines_prev:
+      self.read_distance_lines_prev = self.read_distance_lines
+    
     
     
     #Below values never update
