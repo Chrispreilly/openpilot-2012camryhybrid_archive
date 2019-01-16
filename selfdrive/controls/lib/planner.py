@@ -28,6 +28,7 @@ _DT = 0.01    # 100Hz
 _DT_MPC = 0.2  # 5Hz
 MAX_SPEED_ERROR = 2.0
 AWARENESS_DECEL = -0.2     # car smoothly decel at .2m/s^2 when user is distracted
+TR=1.8 # CS.readdistancelines
 
 GPS_PLANNER_ADDR = "192.168.5.1"
 
@@ -151,9 +152,17 @@ class LongitudinalMpc(object):
     self.prev_lead_status = False
     self.prev_lead_x = 0.0
     self.new_lead = False
-
+    
+    self.override = False      # for one bar distance at low speeds - introduce early braking and hysteresis for resume follow
+    self.lastTR = 2
     self.last_cloudlog_t = 0.0
-
+    self.v_rel = 10
+    self.tailgating = 0
+    self.street_speed = 0
+    self.lead_car_gap_shrinking = 0
+    
+    
+    
   def send_mpc_solution(self, qp_iterations, calculation_time):
     qp_iterations = max(0, qp_iterations)
     dat = messaging.new_message()
@@ -190,7 +199,8 @@ class LongitudinalMpc(object):
     self.cur_state[0].x_ego = 0.0
 
     if lead is not None and lead.status:
-      x_lead = lead.dRel
+      #x_lead = lead.dRel
+      x_lead = max(0, lead.dRel - 2)  # increase stopping distance to car by 2m
       v_lead = max(0.0, lead.vLead)
       a_lead = lead.aLeadK
 
@@ -215,11 +225,61 @@ class LongitudinalMpc(object):
       self.cur_state[0].x_l = 50.0
       self.cur_state[0].v_l = CS.vEgo + 10.0
       a_lead = 0.0
+      v_lead = CS.vEgo + 10.0
+      x_lead = 50.0
       self.a_lead_tau = _LEAD_ACCEL_TAU
 
     # Calculate mpc
     t = sec_since_boot()
-    n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead)
+    
+    
+    # Calculate conditions
+    self.v_rel = v_lead - CS.vEgo   # calculate relative velocity vs lead car
+
+     # Defining some variables to make the logic more human readable for auto distance override below
+    # Is the car tailgating the lead car?
+    if x_lead < 7 or (x_lead < 17.5 and self.v_rel < 0.5):
+      self.tailgating = 1
+    else:
+      self.tailgating = 0
+
+     # Is the car running surface street speeds?
+    if CS.vEgo < 19.44:
+      self.street_speed = 1
+    else:
+      self.street_speed = 0
+
+     # Is the gap from the lead car shrinking?
+    if self.v_rel < -1:
+      self.lead_car_gap_shrinking = 1
+    else:
+      self.lead_car_gap_shrinking = 0
+
+     # Adjust distance from lead car when distance button pressed 
+    if CS.readdistancelines == 1:
+      # If one bar distance, auto set to 2 bar distance under current conditions to prevent rear ending lead car
+      TR=0.9 # 10m at 40km/hr
+      if CS.readdistancelines != self.lastTR:
+        self.libmpc.init(MPC_COST_LONG.TTC, 1.0, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK)
+        self.lastTR = CS.readdistancelines  
+
+     elif CS.readdistancelines == 2:
+      TR=1.8 # 20m at 40km/hr
+      if CS.readdistancelines != self.lastTR:
+        self.libmpc.init(MPC_COST_LONG.TTC, 0.1, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK)
+        self.lastTR = CS.readdistancelines  
+
+     elif CS.readdistancelines == 3:
+      TR=2.7 # 30m at 40km/hr
+      if CS.readdistancelines != self.lastTR:
+        self.libmpc.init(MPC_COST_LONG.TTC, 0.05, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK) 
+        self.lastTR = CS.readdistancelines  
+
+     else:
+      TR=1.8 # if readdistancelines = 0
+
+     n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead, TR)
+    
     duration = int((sec_since_boot() - t) * 1e9)
     self.send_mpc_solution(n_its, duration)
 
