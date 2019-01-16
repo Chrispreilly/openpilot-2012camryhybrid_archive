@@ -318,6 +318,8 @@ class CarInterface(object):
       ret.cruiseState.standstill = False
     else:
       ret.cruiseState.standstill = self.CS.pcm_acc_status == 7
+      
+    ret.readdistancelines = self.CS.read_distance_lines
 
     buttonEvents = []
     if self.CS.left_blinker_on != self.CS.prev_left_blinker_on:
