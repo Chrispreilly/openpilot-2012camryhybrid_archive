@@ -122,6 +122,9 @@ struct CarState {
   # lock info
   doorOpen @24 :Bool;
   seatbeltUnlatched @25 :Bool;
+  
+  # following distance
+  readdistancelines @26 :Float32;
 
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
