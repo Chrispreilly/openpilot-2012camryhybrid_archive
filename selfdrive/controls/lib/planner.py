@@ -263,13 +263,13 @@ class LongitudinalMpc(object):
         self.libmpc.init(MPC_COST_LONG.TTC, 1.0, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK)
         self.lastTR = CS.readdistancelines  
 
-     elif CS.readdistancelines == 2:
+    elif CS.readdistancelines == 2:
       TR=1.8 # 20m at 40km/hr
       if CS.readdistancelines != self.lastTR:
         self.libmpc.init(MPC_COST_LONG.TTC, 0.1, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK)
         self.lastTR = CS.readdistancelines  
 
-     elif CS.readdistancelines == 3:
+    elif CS.readdistancelines == 3:
       TR=2.7 # 30m at 40km/hr
       if CS.readdistancelines != self.lastTR:
         self.libmpc.init(MPC_COST_LONG.TTC, 0.05, MPC_COST_LONG.ACCELERATION, MPC_COST_LONG.JERK) 
